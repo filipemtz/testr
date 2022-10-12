@@ -5,6 +5,8 @@ Site for automatically evaluating programming exercises.
 
 ## Setup 
 
+Create a config.json file (see config-sample.json).
+
 Install requirements.
 
 ```
