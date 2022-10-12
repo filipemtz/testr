@@ -1,0 +1,67 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+
+<div class="form">
+    {% if error_msgs %}
+    <div class="error-msg-container">
+        <ul>
+            {% for error_msg in error_msgs %}
+            <li>{{ error_msg }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <div class="row form-row">
+            <div class="col-4">Role:</div>
+            <div class="col-8">
+                <select name="role" id="role">
+                    <option value="student" selected>Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">First Name:</div>
+            <div class="col-8"><input id='firstname' name="firstname" type="text" /></div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">Last Name:</div>
+            <div class="col-8"><input id='lastname' name="lastname" type="text" /></div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">Username:</div>
+            <div class="col-8"><input id='username' name="username" type="text" /></div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">Email:</div>
+            <div class="col-8"><input id='email' name="email" type="email" /></div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">Password:</div>
+            <div class="col-8"><input id='password' name="password" type="password" /></div>
+        </div>
+        <div class="row form-row">
+            <div class="col-4">Repeat Password:</div>
+            <div class="col-8"><input id='password-check' name="password-check" type="password" /></div>
+        </div>
+        <div class="row form-row text-end">
+            <div class="col-4"></div>
+            <div class="col-8"><input type="submit" value="Sign Up" /></div>
+        </div>
+    </form>
+
+    <br>
+    <div class="row form-row text-end">
+        <div class="col-3"></div>
+        <div class="col-9 text-center">
+            <a href="{% url 'login' %}">Back to Login</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

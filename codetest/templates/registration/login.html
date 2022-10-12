@@ -1,0 +1,57 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+
+<div class="form">
+    {% if message %}
+    <div class="info-msg">{{ message }}</div>
+    {% endif %}
+
+    {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="row form-row">
+            <div class="col-3">{{ form.username.label_tag }}</div>
+            <div class="col-9">{{ form.username }}</div>
+        </div>
+        <div class="row form-row">
+            <div class="col-3">{{ form.password.label_tag }}</div>
+            <div class="col-9">{{ form.password }}</div>
+        </div>
+        <div class="row form-row text-end">
+            <div class="col-3"></div>
+            <div class="col-9"><input type="submit" value="login" /></div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <div class="row form-row text-end">
+        <div class="col-3"></div>
+        <div class="col-9 text-center">
+            <a href="{% url 'password_reset' %}">Lost password?</a>
+        </div>
+    </div>
+
+    <div class="row form-row text-end">
+        <div class="col-3"></div>
+        <div class="col-9 text-center">
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

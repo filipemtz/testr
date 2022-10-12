@@ -1,0 +1,36 @@
+.container-fluid,
+.navbar,
+.navbar-collapse,
+.d-flex,
+.navbar-nav,
+.nav-text,
+.nav-link,
+.active,
+.navbar-dark,
+.bg-dark,
+.navbar-expand-lg {
+    padding: 0px;
+    margin: 0px;
+}
+
+.navbar {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.navbar,
+.nav-icon {
+    color: white;
+}
+
+.nav-icon:hover {
+    color: lightblue;
+}
+
+.nav-icon {
+    font-size: 16pt;
+}
+
+.navbar-toggler-icon {
+    font-size: 0.5em;
+}

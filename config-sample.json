@@ -1,0 +1,4 @@
+{
+    "db": "<PATH TO DATABASE FILE>",
+    "secret_key": "<SECRET KEY>"
+}

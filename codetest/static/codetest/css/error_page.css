@@ -1,0 +1,25 @@
+body {
+    text-align: center;
+    color: red;
+    margin: auto;
+    width: 50%;
+    padding-top: 5%;
+}
+
+.error-emoji {
+    font-size: 150pt;
+}
+
+.error-text {
+    font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 70pt;
+    font-weight: bolder;
+}
+
+.error-message {
+    font-size: large;
+}
+
+.back-link {
+    padding-top: 5%;
+}
