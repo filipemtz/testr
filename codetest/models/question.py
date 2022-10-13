@@ -24,11 +24,11 @@ class Question(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         """Returns the URL to access a detail record ."""
-        return reverse('question', args=[str(self.id)])
+        return reverse('question-update', args=[str(self.id)])

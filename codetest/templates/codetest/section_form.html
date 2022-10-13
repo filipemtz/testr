@@ -8,18 +8,9 @@
         {{ form.as_table }}
     </table>
     <input type="submit" value="Submit" />
-
-    {% if course %}
-    <a href="{% url 'course-delete' course.id %}">Delete</a>
+    {% if section %}
+    <a href="{% url 'section-delete' section.id %}">Delete</a>
     {% endif %}
-
 </form>
-
-{% if course %}
-<a href="{% url 'course-detail' course.id %}">Back</a>
-{% else %}
-<a href="{% url 'courses' %}">Back</a>
-{% endif %}
-
 
 {% endblock %}

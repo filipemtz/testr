@@ -1,7 +1,12 @@
 
 # Backlog
 
-- [ ] add checks for permissions in all views
-- [ ] write tests
-- [ ] adicionar botao de voltar nas forms. a dificuldade eh que no create, 
-devemos voltar para a listview e no update para o detailview.
+- [ ] Drag and drop questions between sections.
+- [ ] Add validation to forms by using proper Fields (see https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Forms).
+- [ ] Import and export questions from/to BOCA.
+- [ ] Import users from file (similar to BOCA).
+- [ ] Add checks for permissions in all views
+- [ ] Add 'back' links in the templates of forms. The challenging part is that
+in the 'create' action, we have to return to the listview, while in the update
+we have to return to the detailview.
+- [ ] Write tests

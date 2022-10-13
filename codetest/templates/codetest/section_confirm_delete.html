@@ -1,0 +1,16 @@
+{% extends "codetest/base.html" %}
+
+{% block content %}
+
+<h1>Delete Section</h1>
+
+<p>Are you sure you want to delete the section: {{ section.name }}?</p>
+
+<div class="text-danger">All questions and submissions will be deleted! This is an irreversible action!</div>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Yes, delete." />
+</form>
+
+{% endblock %}

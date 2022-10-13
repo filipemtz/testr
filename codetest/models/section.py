@@ -12,11 +12,11 @@ class Section(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         """Returns the URL to access a detail record ."""
-        return reverse('section', args=[str(self.id)])
+        return reverse('section-update', args=[str(self.id)])

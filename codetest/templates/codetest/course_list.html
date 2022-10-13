@@ -9,17 +9,17 @@
 {% endif %}
 
 {% if course_list %}
-<ul>
+<div>
     {% for course in course_list %}
-    <li>
+    <div>
         <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
-    </li>
+    </div>
     {% endfor %}
-</ul>
+</div>
 
 {% else %}
 
-<p>There are no courses here yet.</p>
+<div>There are no courses here yet.</div>
 
 {% endif %}
 
