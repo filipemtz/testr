@@ -1,0 +1,38 @@
+{% extends "codetest/base.html" %}
+
+{% block content %}
+
+<h1>{{ course.name }}</h1>
+
+<div class="row">
+    <div class="col-10">
+        <a href="{% url 'courses' %}">Back</a>
+    </div>
+    <div class="col-1">
+        <a href="{% url 'course-update' course.id %}">Edit</a>
+    </div>
+    <div class="col-1">
+        <a href="{% url 'course-delete' course.id %}">Delete</a>
+    </div>
+</div>
+
+<div>
+    {% for section in course.section_set.all %}
+    <div>
+        <a href="{{ section.get_absolute_url }}">{{ section.name }}</a>
+
+        {% for question in section.question_set.all %}
+        <div>
+            <a href="{{ question.get_absolute_url }}">{{ question.name }}</a>
+        </div>
+        {% empty %}
+        <div>No questions in the course yet.</div>
+        {% endfor %}
+
+    </div>
+    {% empty %}
+    <div>No sections in the course yet.</div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -7,6 +7,7 @@ from .models import (
     EvaluationInputOutput,
     EvaluationScript,
     Submission,
+    Enrollment
 )
 
 admin.site.register(Course)
@@ -15,3 +16,4 @@ admin.site.register(Question)
 admin.site.register(EvaluationInputOutput)
 admin.site.register(EvaluationScript)
 admin.site.register(Submission)
+admin.site.register(Enrollment)

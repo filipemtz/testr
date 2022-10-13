@@ -17,5 +17,4 @@ class Course(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        """Returns the URL to access a detail record ."""
-        return reverse('course', args=[str(self.id)])
+        return reverse('course-detail', args=[str(self.id)])

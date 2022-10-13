@@ -25,6 +25,13 @@ Create user for the admin page (acessible via /admin).
 python manage.py createsuperuser
 ```
 
+Create groups and assign permissions.
+
+```
+python manage.py setperms
+```
+
+
 That's it. Just run the server and follow the URL presented in the terminal
 to start using the system.
 

@@ -1,0 +1,26 @@
+{% extends "codetest/base.html" %}
+
+{% block content %}
+
+<h1>Courses</h1>
+
+{% if allow_course_creation %}
+<a href="{% url 'course-create' %}"><i class="bi bi-plus-square"></i> New Course</a>
+{% endif %}
+
+{% if course_list %}
+<ul>
+    {% for course in course_list %}
+    <li>
+        <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<p>There are no courses here yet.</p>
+
+{% endif %}
+
+{% endblock %}

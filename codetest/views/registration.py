@@ -90,7 +90,7 @@ def signup_form(request):
                 password=request.POST['password']
             )
             login(request, user)
-            return redirect(f'/codetest/')
+            return redirect(f'/codetest/courses')
 
     return render(request, 'registration/signup.html', {
         'error_msgs': error_msgs
