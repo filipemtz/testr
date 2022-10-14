@@ -1,61 +1,36 @@
-
+import json
 from typing import List
 from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand, CommandError
-
-
-def get_or_create_groups(group_names: List[str]) -> List[Group]:
-    # get_or_create returns a pair (group, created) in which the first is
-    # the returned group and the second is a boolean indicating if the group
-    # was created or only read from the db.
-    return [Group.objects.get_or_create(name=name)[0] for name in group_names]
+from matplotlib.font_manager import json_load
 
 
 class Command(BaseCommand):
     help = 'Create groups if they do not exist and assign permissions.'
 
+    def add_arguments(self, parser):
+        parser.add_argument('perm_file', type=str, help='path to the json file containing the groups and their permissions.')
+
     def handle(self, *args, **options):
-        groups = get_or_create_groups(['student', 'teacher'])
-        students_group = groups[0]
-        teachers_group = groups[1]
+        with open(options['perm_file'], "r") as f:
+            groups_and_perms = json.load(f)
 
-        students_group.permissions.clear()
-        students_group.permissions.add(
-            Permission.objects.get(codename='view_course'),
-            Permission.objects.get(codename='view_section'),
-            Permission.objects.get(codename='view_question'),
-            Permission.objects.get(codename='view_evaluationinputoutput'),
-            Permission.objects.get(codename='add_enrollment'),
-            Permission.objects.get(codename='change_enrollment'),
-            Permission.objects.get(codename='delete_enrollment'),
-            Permission.objects.get(codename='view_enrollment'),
-            Permission.objects.get(codename='add_submission'),
-            Permission.objects.get(codename='change_submission'),
-            Permission.objects.get(codename='delete_submission'),
-            Permission.objects.get(codename='view_submission'),
-        )
+        for group_name, perms in groups_and_perms.items():
+            # get_or_create returns a pair (group, created) in which the first is
+            # the returned group and the second is a boolean indicating if the group
+            # was created or only read from the db.
+            group, _ = Group.objects.get_or_create(name=group_name)
+            print(f"Group '{group_name}' created or loaded.")
 
-        print("Students permissions:")
-        for perm in students_group.permissions.all():
-            print(f'\t{perm}')
+            group.permissions.clear()
+           
+            for model, permissions in perms.items():
+                if permissions == 'all':
+                    permissions = ['view', 'add', 'change', 'delete']
+                
+                for permission in permissions:
+                    permission_name = f"{permission}_{model}"
+                    permission = Permission.objects.get(codename=permission_name)
+                    group.permissions.add(permission)                    
 
-        teachers_group.permissions.add(
-            *Permission.objects.all()
-        )
-
-        print("Teachers permissions:")
-        for perm in teachers_group.permissions.all():
-            print(f'\t{perm}')
-
-
-'''
-def run():
-    students_group.permissions.clear()
-    students_group.permissions.add(
-        Permission.objects.get(codename='codetest.view_course'),
-        Permission.objects.get(codename='codetest.view_question'),
-        Permission.objects.get(codename='codetest.view_evaluation_input_output'),
-        Permission.objects.get(codename='codetest.view_'),
-        Permission.objects.get(codename='codetest.view_course'),
-    )
-'''
+                print(f"{group_name} group has '{permissions}' permissions in '{model}'.")

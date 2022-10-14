@@ -28,7 +28,7 @@ python manage.py createsuperuser
 Create groups and assign permissions.
 
 ```
-python manage.py setperms
+python manage.py setperms permissions.json
 ```
 
 
@@ -39,6 +39,8 @@ to start using the system.
 python manage.py runserver
 ```
 
+## Information for Devs/Contributors
 
+- Permissions are used in ```codetest/template/*_list.html```, ```codetest/template/*_form.html```, and ```codetest/template/*_detail.html``` to control which buttons/links each group can view.
 
 

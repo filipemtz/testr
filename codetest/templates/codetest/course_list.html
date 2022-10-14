@@ -4,7 +4,7 @@
 
 <h1>Courses</h1>
 
-{% if allow_course_creation %}
+{% if perms.codetest.add_course %}
 <a href="{% url 'course-create' %}"><i class="bi bi-plus-square"></i> New Course</a>
 {% endif %}
 

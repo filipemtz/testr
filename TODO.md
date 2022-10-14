@@ -2,6 +2,7 @@
 # Backlog
 
 - [ ] Drag and drop questions between sections.
+- [ ] Limit teacher permissions to prevent people from registering as teacher and acessing the admin page.
 - [ ] Add validation to forms by using proper Fields (see https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Forms).
 - [ ] Import and export questions from/to BOCA.
 - [ ] Import users from file (similar to BOCA).

@@ -1,4 +1,4 @@
-
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -9,6 +9,7 @@ class Course(models.Model):
     professor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(default=timezone.now)
+    enroll_password = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
         ordering = ['-created_at']

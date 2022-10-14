@@ -4,8 +4,20 @@
 
 <div>
     <span class="h1">{{ course.name }} </span>
+    {% if perms.codetest.change_section %}
     (<a href="{% url 'course-update' course.id %}">Edit</a>)
+    <div>
+        Enrollment link:
+        <span>
+            http://{{ request.get_host }}{% url 'enroll-course' course.id course.enroll_password %}
+        </span>
+    </div>
+    {% else %}
+    <a href="{% url 'unenroll-course' course.id %}">Unroll</a>
+    {% endif %}
 </div>
+
+
 
 <div class="row">
     <div class="col-12">
@@ -14,16 +26,23 @@
 </div>
 
 <div>
+
+    {% if perms.codetest.add_section %}
     <div>
         <a href="{% url 'section-create' course.id %}"><i class="bi bi-plus-square"></i> New Section</a>
     </div>
+    {% endif %}
+
     {% for section in course.section_set.all %}
     <div>
         <a href="{{ section.get_absolute_url }}">{{ section.name }}</a>
 
+        {% if perms.codetest.add_question %}
         <div>
             <a href="{% url 'question-create' section.id %}"><i class="bi bi-plus-square"></i> New Question</a>
         </div>
+        {% endif %}
+
         {% for question in section.question_set.all %}
         <div>
             <a href="{{ question.get_absolute_url }}">{{ question.name }}</a>

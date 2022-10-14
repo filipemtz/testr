@@ -1,25 +1,31 @@
 
+from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
-from codetest.models import Course
+from codetest.models import Course, Enrollment
+from codetest.utils.group_validator import GroupValidator
 
 
 class CourseListView(LoginRequiredMixin, generic.ListView):
     model = Course
 
     def get_queryset(self):
-        return Course.objects.filter(professor=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(CourseListView, self).get_context_data(**kwargs)
-        context['allow_course_creation'] = \
-            self.request.user.has_perm('codetest.add_course')
-        print("self.request.user.has_perm('codetest.add_course'):",
-              self.request.user.has_perm('codetest.add_course'))
-        return context
+        if GroupValidator.user_is_in_group(self.request.user, 'teacher'):
+            return Course.objects.filter(professor=self.request.user)
+        else:
+            # ##################################################################################
+            # TODO: Find the correct way of returning the courses that the student is enrolled.
+            # This solution is clearly inefficient, but I could not find a better one...
+            # In principle, we could return the list of courses in the second line, but
+            # django complains that the method should return a QuerySet.
+            # ##################################################################################
+            enrolls = Enrollment.objects.filter(student=self.request.user)
+            course_ids = [e.course.id for e in enrolls]
+            return Course.objects.filter(id__in=course_ids)
 
 
 class CourseDetailView(generic.DetailView):
@@ -46,3 +52,45 @@ class CourseUpdate(UpdateView):
 class CourseDelete(DeleteView):
     model = Course
     success_url = reverse_lazy('courses')
+
+
+@login_required
+def enroll_course(request, course_id, enroll_password):
+    if not GroupValidator.user_is_in_group(request.user, 'student'):
+        return redirect(f'/codetest/courses')
+
+    course = get_object_or_404(
+        Course,
+        id=course_id,
+        enroll_password=enroll_password
+    )
+
+    # only create a new enrollment if user is not already enrolled
+    previous_enrolls = Enrollment.objects.filter(
+        course=course,
+        student=request.user
+    )
+
+    if previous_enrolls.count() <= 0:
+        enroll = Enrollment(course=course, student=request.user)
+        enroll.save()
+
+    return redirect('course-detail', pk=course.id)
+
+
+@login_required
+def unenroll_course(request, course_id):
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    enroll = Enrollment.objects.filter(
+        course=course,
+        student=request.user
+    )
+
+    if enroll.count() > 0:
+        enroll.delete()
+
+    return redirect(f'/codetest/courses')

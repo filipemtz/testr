@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if perms.codetest.change_course %}
 <form action="" method="post">
     {% csrf_token %}
     <table>
@@ -10,10 +11,12 @@
     <input type="submit" value="Submit" />
 
     {% if course %}
+    {% if perms.codetest.delete_course %}
     <a href="{% url 'course-delete' course.id %}">Delete</a>
     {% endif %}
-
+    {% endif %}
 </form>
+{% endif %}
 
 {% if course %}
 <a href="{% url 'course-detail' course.id %}">Back</a>

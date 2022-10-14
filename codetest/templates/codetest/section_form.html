@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if perms.codetest.change_section %}
 <form action="" method="post">
     {% csrf_token %}
     <table>
@@ -9,8 +10,11 @@
     </table>
     <input type="submit" value="Submit" />
     {% if section %}
+    {% if perms.codetest.delete_section %}
     <a href="{% url 'section-delete' section.id %}">Delete</a>
     {% endif %}
+    {% endif %}
 </form>
+{% endif %}
 
 {% endblock %}

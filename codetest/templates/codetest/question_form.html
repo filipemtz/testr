@@ -2,16 +2,21 @@
 
 {% block content %}
 
+{% if perms.codetest.change_question %}
 <form action="" method="post">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
     </table>
     <input type="submit" value="Submit" />
+
     {% if question %}
+    {% if perms.codetest.delete_question %}
     <a href="{% url 'question-delete' question.id %}">Delete</a>
     {% endif %}
+    {% endif %}
 </form>
+{% endif %}
 
 {% if question %}
 <a href="{% url 'course-detail' question.section.course.id %}">Back</a>
