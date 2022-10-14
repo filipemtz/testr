@@ -88,4 +88,8 @@ class QuestionDetailView(generic.DetailView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['form'] = SubmissionForm()
+        context['user_submissions'] = Submission.objects.filter(
+            student=self.request.user,
+            question=self.object
+        )
         return context

@@ -1,0 +1,60 @@
+.h1 {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.h2 {
+    font-size: 14pt;
+}
+
+.h3 {
+    font-size: 12pt;
+}
+
+.sections {
+    padding-top: 20px;
+}
+
+.questions {
+    padding-top: 10px;
+}
+
+.section {
+    padding-bottom: 3%;
+}
+
+.question {
+    padding-left: 5%;
+    padding-bottom: 1%;
+}
+
+.new-section,
+.new-course,
+.course {
+    padding-bottom: 20px;
+}
+
+.new-question {
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.question-description {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+a .bi-pencil,
+a .bi-x-lg {
+    padding-left: 10px;
+}
+
+.form-widgets-area {
+    /* 
+    Configurations that have to be consistent: 
+    - codetest-template.css > .form-widgets-area
+    - widgets.css > labels 
+    - widgets.css > input,textarea,etc. 
+    */
+    padding-left: 25%;
+}

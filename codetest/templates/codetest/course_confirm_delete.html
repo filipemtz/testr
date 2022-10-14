@@ -8,11 +8,13 @@
 
 <div class="text-danger">All sections, questions, and submissions will be deleted! This is an irreversible action!</div>
 
+<br>
 <form action="" method="POST">
     {% csrf_token %}
     <input type="submit" value="Yes, delete." />
 </form>
 
+<br>
 <a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
 
 {% endblock %}

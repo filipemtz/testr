@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div>
+<div class="text-center">
     <span class="h1">{{ course.name }} </span>
     {% if perms.codetest.change_course %}
     <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
@@ -19,48 +19,73 @@
     {% endif %}
 </div>
 
+<br>
+<br>
 <div>
     <a href="{% url 'courses' %}">Back</a>
 </div>
 
-<div>
+<div class='sections'>
 
     {% if perms.codetest.add_section %}
-    <div>
-        <a href="{% url 'section-create' course.id %}"><i class="bi bi-plus-square"></i> New Section</a>
+    <div class="new-section">
+        <a href="{% url 'section-create' course.id %}"><i class="bi bi-plus-lg"></i> New Section </a>
     </div>
     {% endif %}
 
     {% for section in course.section_set.all %}
-    <div>
+    <div class="section">
+        <span class="h2">{{ forloop.counter }}. {{ section.name }}</span>
+
         {% if perms.codetest.change_section %}
-        <a href="{{ section.get_absolute_url }}">Section: {{ section.name }}</a>
-        {% else %}
-        Section: {{ section.name }}
+        <a href="{{ section.get_absolute_url }}"><i class="bi bi-pencil"></i></a>
+        {% endif %}
+
+        {% if perms.codetest.delete_section %}
+        <a href="{% url 'section-delete' section.id %}"><i class="bi bi-x-lg text-danger"></i></a>
         {% endif %}
 
         {% if perms.codetest.add_question %}
-        <div>
-            <a href="{% url 'question-create' section.id %}"><i class="bi bi-plus-square"></i> New Question</a>
+        <div class="new-question">
+            <a href="{% url 'question-create' section.id %}"><i class="bi bi-plus-lg"></i> New Question</a>
         </div>
         {% endif %}
 
-        {% for question in section.question_set.all %}
-        <div>
-            {% if perms.codetest.change_section %}
-            <a href="{{ question.get_absolute_url }}">Question: {{ question.name }}</a>
-            {% else %}
-            <a href="{% url 'question-detail' question.id %}">Question: {{ question.name }}</a>
-            {% endif %}
+        <div class='questions'>
+            {% for question in section.question_set.all %}
+            <div class="question">
+                <span class='h3'>
+                    <a href="{% url 'question-detail' question.id %}">{{ forloop.counter }}. {{ question.name }}</a>
+                </span>
+
+                {% if perms.codetest.change_question %}
+                <a href="{{ question.get_absolute_url }}"><i class="bi bi-pencil"></i></a>
+                {% endif %}
+
+                {% if perms.codetest.delete_question %}
+                <a href="{% url 'question-delete' question.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="section">
+                This course has no questions yet.
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div>No questions in the section yet.</div>
-        {% endfor %}
 
     </div>
     {% empty %}
-    <div>No sections in the course yet.</div>
+    <div class="section">
+        This course has no sections yet.
+    </div>
     {% endfor %}
+
+</div>
+
+<br>
+
+<div>
+    <a href="{% url 'courses' %}">Back</a>
 </div>
 
 {% endblock %}

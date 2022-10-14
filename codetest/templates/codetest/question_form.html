@@ -2,22 +2,40 @@
 
 {% block content %}
 
+<div class="h1">Question Editor</div>
+
 {% if perms.codetest.change_question %}
 <form action="" method="post">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit" />
+    <ul>
+        {{ form.as_ul }}
+    </ul>
 
-    {% if question %}
-    {% if perms.codetest.delete_question %}
-    <a href="{% url 'question-delete' question.id %}">Delete</a>
-    {% endif %}
-    {% endif %}
+    <div class="form-widgets-area">
+        <div class="d-flex justify-content-between">
+            <div class="p-2">
+                <input class='btn btn-success' type="submit" value="Save" />
+            </div>
+
+            {% if question %}
+            {% if perms.codetest.delete_question %}
+            <div class="ml-auto p-2">
+                <a href="{% url 'question-delete' question.id %}">
+                    <div class="btn btn-danger">
+                        Delete
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
 </form>
 {% endif %}
 
-<a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
+<div class="form-widgets-area">
+    <a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
+</div>
 
 {% endblock %}

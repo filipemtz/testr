@@ -32,6 +32,7 @@
     <link href="{% static 'codetest/css/navbar.css' %}" rel="stylesheet">
     <link href="{% static 'codetest/css/base.css' %}" rel="stylesheet">
     <link href="{% static 'codetest/css/widgets.css' %}" rel="stylesheet">
+    <link href="{% static 'codetest/css/codetest-templates.css' %}" rel="stylesheet">
 
     {% block css %}
     {% endblock %}
@@ -102,8 +103,11 @@
         <span id="feedback_message"></span>
     </div>
 
-    <!-- Additional Space for a more Confortable Scrolling in the Page -->
-    <div style="padding-top: 500px;"></div>
+    <div class="footer">
+        CodeTest @ 2022
+    </div>
+
+
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

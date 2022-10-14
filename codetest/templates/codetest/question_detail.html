@@ -2,30 +2,43 @@
 
 {% block content %}
 
-<div class="h1">
+<div>
     <span class="h1"> {{ question.name }} </span>
 
     {% if perms.codetest.change_question %}
     <a href="{% url 'question-update' question.id %}"><i class="bi bi-pencil"></i></a>
     {% endif %}
 
+    {% if perms.codetest.delete_question %}
+    <a href="{% url 'question-delete' question.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+    {% endif %}
 </div>
 
-<div>
+<div class="question-description">
     {{ question.description }}
 </div>
+
+<hr>
 
 <form action="{% url 'question-submission' question.id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <ul>
         {{ form.as_ul }}
     </ul>
-    <input type="submit" value="Submit">
+
+    <div class="form-widgets-area">
+        <div class="d-flex justify-content-between">
+            <div class="p-2">
+                <input class='btn btn-success' type="submit" value="Send">
+            </div>
+        </div>
+    </div>
+
 </form>
 
-{% if question.submission_set.all %}
+{% if user_submissions %}
 <div>
-    {% for submission in question.submission_set.all %}
+    {% for submission in user_submissions %}
     <div>
         Submission at {{ submission.created_at }} - File: {{ submission.file_name }} - Status:
         {{ submission.status_label }}
@@ -40,6 +53,8 @@
 
 {% endif %}
 
+<br>
+<br>
 
 <div><a href="{% url 'course-detail' question.section.course.id %}">Back</a></div>
 

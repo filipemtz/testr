@@ -12,6 +12,10 @@
     color: black;
 }
 
+a:hover {
+    color: darkblue;
+}
+
 .clickable:hover {
     cursor: pointer;
 }
@@ -55,4 +59,67 @@ li {
 
 li {
     list-style-type: none;
+}
+
+input[type="file"]::file-selector-button {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+input[type="submit"],
+button {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.btn {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 10pt;
+}
+
+form,
+li {
+    padding-bottom: 20px;
+}
+
+input[type="file"]::file-selector-button:hover {
+    cursor: pointer;
+}
+
+input[type="text"],
+textarea,
+select {
+    /* 
+    Configurations that have to be consistent: 
+    - codetest-template.css > .form-widgets-area
+    - widgets.css > labels 
+    - widgets.css > input,textarea,etc. 
+    */
+    width: 74%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+label {
+    /* 
+    Configurations that have to be consistent: 
+    - codetest-template.css > .form-widgets-area
+    - widgets.css > labels 
+    - widgets.css > input,textarea,etc. 
+    */
+    vertical-align: top;
+    text-align: right;
+    padding-right: 20px;
+    width: 25%;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

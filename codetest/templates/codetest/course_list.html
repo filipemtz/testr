@@ -2,17 +2,32 @@
 
 {% block content %}
 
-<h1>Courses</h1>
+<div class="h1">Courses</div>
+
+<br>
 
 {% if perms.codetest.add_course %}
-<a href="{% url 'course-create' %}"><i class="bi bi-plus-square"></i> New Course</a>
+<div class='new-course'>
+    <a href="{% url 'course-create' %}"><i class="bi bi-plus-lg"></i> New Course</a>
+</div>
 {% endif %}
 
 {% if course_list %}
 <div>
     {% for course in course_list %}
-    <div>
-        <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
+    <div class="course">
+        <span class="h2">
+            <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
+        </span>
+
+        {% if perms.codetest.change_section %}
+        <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
+        {% endif %}
+
+        {% if perms.codetest.delete_section %}
+        <a href="{% url 'course-delete' course.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+        {% endif %}
+
     </div>
     {% endfor %}
 </div>
