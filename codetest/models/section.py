@@ -18,5 +18,4 @@ class Section(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        """Returns the URL to access a detail record ."""
         return reverse('section-update', args=[str(self.id)])

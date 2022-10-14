@@ -35,6 +35,6 @@ class Submission(models.Model):
     def __str__(self):
         return self.file_name
 
-    def get_absolute_url(self):
-        """Returns the URL to access a detail record ."""
-        return reverse('submission', args=[str(self.id)])
+    # remove?
+    # def get_absolute_url(self):
+    #    return reverse('submission', args=[str(self.id)])

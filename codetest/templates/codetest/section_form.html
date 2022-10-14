@@ -5,9 +5,9 @@
 {% if perms.codetest.change_section %}
 <form action="" method="post">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
+    <ul>
+        {{ form.as_ul }}
+    </ul>
     <input type="submit" value="Submit" />
     {% if section %}
     {% if perms.codetest.delete_section %}
@@ -16,5 +16,7 @@
     {% endif %}
 </form>
 {% endif %}
+
+<a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
 
 {% endblock %}

@@ -7,22 +7,20 @@
     {% if perms.codetest.change_course %}
     <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
     <div>
-        Enrollment link:
-        <span>
-            http://{{ request.get_host }}{% url 'enroll-course' course.id course.enroll_password %}
-        </span>
+        <i>
+            Enrollment link:
+            <span>
+                http://{{ request.get_host }}{% url 'enroll-course' course.id course.enroll_password %}
+            </span>
+        </i>
     </div>
     {% else %}
     <a href="{% url 'unenroll-course' course.id %}">Unenroll</a>
     {% endif %}
 </div>
 
-
-
-<div class="row">
-    <div class="col-12">
-        <a href="{% url 'courses' %}">Back</a>
-    </div>
+<div>
+    <a href="{% url 'courses' %}">Back</a>
 </div>
 
 <div>

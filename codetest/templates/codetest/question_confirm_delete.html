@@ -13,4 +13,6 @@
     <input type="submit" value="Yes, delete." />
 </form>
 
+<a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
+
 {% endblock %}

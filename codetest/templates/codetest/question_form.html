@@ -18,8 +18,6 @@
 </form>
 {% endif %}
 
-{% if question %}
-<a href="{% url 'course-detail' question.section.course.id %}">Back</a>
-{% endif %}
+<a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
 
 {% endblock %}
