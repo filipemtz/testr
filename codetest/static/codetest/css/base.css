@@ -12,7 +12,8 @@ body {
 .main-content {
     padding-left: 25%;
     padding-right: 25%;
-    padding-bottom: 25%;
+    padding-bottom: 200px;
+    min-height: 100%;
 }
 
 #feedback_box {
