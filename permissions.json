@@ -1,0 +1,20 @@
+{
+    "teacher": 
+    {
+        "course": "all",
+        "enrollment": "all",
+        "evaluationinputoutput": "all",
+        "evaluationscript": "all",
+        "question": "all",
+        "section": "all",
+        "submission": "all"
+    },
+    "student": 
+    {
+        "course": ["view"],
+        "enrollment": "all",
+        "question": ["view"],
+        "section": ["view"],
+        "submission": "all"
+    }
+}
