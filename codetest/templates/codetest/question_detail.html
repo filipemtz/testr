@@ -2,37 +2,45 @@
 
 {% block content %}
 
-<h1>{{ course.name }}</h1>
+<div class="h1">
+    <span class="h1"> {{ question.name }} </span>
 
-<div class="row">
-    <div class="col-10">
-        <a href="{% url 'courses' %}">Back</a>
-    </div>
-    <div class="col-1">
-        <a href="{% url 'course-update' course.id %}">Edit</a>
-    </div>
-    <div class="col-1">
-        <a href="{% url 'course-delete' course.id %}">Delete</a>
-    </div>
+    {% if perms.codetest.change_question %}
+    <a href="{% url 'question-update' question.id %}"><i class="bi bi-pencil"></i></a>
+    {% endif %}
+
 </div>
 
 <div>
-    {% for section in course.section_set.all %}
+    {{ question.description }}
+</div>
+
+<form action="{% url 'question-submission' question.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <ul>
+        {{ form.as_ul }}
+    </ul>
+    <input type="submit" value="Submit">
+</form>
+
+{% if question.submission_set.all %}
+<div>
+    {% for submission in question.submission_set.all %}
     <div>
-        <a href="{{ section.get_absolute_url }}">{{ section.name }}</a>
-
-        {% for question in section.question_set.all %}
-        <div>
-            <a href="{{ question.get_absolute_url }}">{{ question.name }}</a>
-        </div>
-        {% empty %}
-        <div>No questions in the course yet.</div>
-        {% endfor %}
-
+        Submission at {{ submission.created_at }} - File: {{ submission.file_name }} - Status:
+        {{ submission.status_label }}
+        </a>
     </div>
-    {% empty %}
-    <div>No sections in the course yet.</div>
     {% endfor %}
 </div>
+
+{% else %}
+
+<div>There are no submissions yet.</div>
+
+{% endif %}
+
+
+<div><a href="{% url 'course-detail' question.section.course.id %}">Back</a></div>
 
 {% endblock %}

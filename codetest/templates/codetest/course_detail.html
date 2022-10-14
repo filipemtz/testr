@@ -4,8 +4,8 @@
 
 <div>
     <span class="h1">{{ course.name }} </span>
-    {% if perms.codetest.change_section %}
-    (<a href="{% url 'course-update' course.id %}">Edit</a>)
+    {% if perms.codetest.change_course %}
+    <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
     <div>
         Enrollment link:
         <span>
@@ -13,7 +13,7 @@
         </span>
     </div>
     {% else %}
-    <a href="{% url 'unenroll-course' course.id %}">Unroll</a>
+    <a href="{% url 'unenroll-course' course.id %}">Unenroll</a>
     {% endif %}
 </div>
 
@@ -35,7 +35,11 @@
 
     {% for section in course.section_set.all %}
     <div>
-        <a href="{{ section.get_absolute_url }}">{{ section.name }}</a>
+        {% if perms.codetest.change_section %}
+        <a href="{{ section.get_absolute_url }}">Section: {{ section.name }}</a>
+        {% else %}
+        Section: {{ section.name }}
+        {% endif %}
 
         {% if perms.codetest.add_question %}
         <div>
@@ -45,10 +49,14 @@
 
         {% for question in section.question_set.all %}
         <div>
-            <a href="{{ question.get_absolute_url }}">{{ question.name }}</a>
+            {% if perms.codetest.change_section %}
+            <a href="{{ question.get_absolute_url }}">Question: {{ question.name }}</a>
+            {% else %}
+            <a href="{% url 'question-detail' question.id %}">Question: {{ question.name }}</a>
+            {% endif %}
         </div>
         {% empty %}
-        <div>No questions in the course yet.</div>
+        <div>No questions in the section yet.</div>
         {% endfor %}
 
     </div>

@@ -35,10 +35,15 @@ urlpatterns = [
     path('question/<int:pk>/delete/',
          views.QuestionDelete.as_view(), name='question-delete'),
 
-    # enrollment
+    # course enrollment
     path('course/<int:course_id>/enroll/<uuid:enroll_password>',
          views.enroll_course, name="enroll-course"),
     path('course/<int:course_id>/unenroll/',
          views.unenroll_course, name='unenroll-course'),
 
+    # submission
+    path('question/<int:pk>',
+         views.QuestionDetailView.as_view(), name="question-detail"),
+    path('question/<int:question_id>/submission',
+         views.perform_question_submission, name="question-submission"),
 ]

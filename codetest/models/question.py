@@ -8,8 +8,8 @@ from .section import Section
 
 
 class Language(models.TextChoices):
-    CCPP = 'CC', _('c/c++')
-    PYTHON = 'PT', _('python')
+    CCPP = 'CC', _('C/C++')
+    PYTHON = 'PT', _('Python')
 
 
 class Question(models.Model):
