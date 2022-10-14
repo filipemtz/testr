@@ -15,13 +15,16 @@ class Language(models.TextChoices):
 class Question(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, default='')
+
     language = models.TextField(
         max_length=2,
         choices=Language.choices,
         default=Language.PYTHON
     )
+
     created_at = models.DateTimeField(default=timezone.now)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['created_at']

@@ -49,12 +49,22 @@ a .bi-x-lg {
     padding-left: 10px;
 }
 
-.form-widgets-area {
-    /* 
-    Configurations that have to be consistent: 
-    - codetest-template.css > .form-widgets-area
-    - widgets.css > labels 
-    - widgets.css > input,textarea,etc. 
-    */
-    padding-left: 25%;
+.input_output_test {
+    padding-bottom: 20px;
+}
+
+.input_output_test textarea {
+    min-height: 100px;
+}
+
+.in-out-test-buttons,
+.in-out-test-buttons .bi-x-lg {
+    height: 100%;
+    font-size: 14pt;
+    padding-left: 0px;
+}
+
+.in-out-test-buttons {
+    padding-top: 20px;
+    padding-bottom: 20px;
 }

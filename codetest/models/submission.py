@@ -34,7 +34,3 @@ class Submission(models.Model):
 
     def __str__(self):
         return self.file_name
-
-    # remove?
-    # def get_absolute_url(self):
-    #    return reverse('submission', args=[str(self.id)])

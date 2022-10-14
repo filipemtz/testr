@@ -102,7 +102,7 @@ select {
     - widgets.css > labels 
     - widgets.css > input,textarea,etc. 
     */
-    width: 74%;
+    width: 100%;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
@@ -117,9 +117,7 @@ label {
     - widgets.css > input,textarea,etc. 
     */
     vertical-align: top;
-    text-align: right;
-    padding-right: 20px;
-    width: 25%;
+    width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
 }

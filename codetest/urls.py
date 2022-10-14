@@ -29,7 +29,7 @@ urlpatterns = [
 
     # question management
     path('section/<int:section_id>/question/create/',
-         views.QuestionCreate.as_view(), name="question-create"),
+         views.question_create, name="question-create"),
     path('question/<int:pk>/update/',
          views.QuestionUpdate.as_view(), name='question-update'),
     path('question/<int:pk>/delete/',
@@ -46,4 +46,18 @@ urlpatterns = [
          views.QuestionDetailView.as_view(), name="question-detail"),
     path('question/<int:question_id>/submission',
          views.perform_question_submission, name="question-submission"),
+
+    # input/output tests management
+    path('question/<int:question_id>/in_out/create',
+         views.question_create_input_output_test,
+         name="question-create-in_out-test"),
+
+    path('in_out_test/<int:pk>/update',
+         views.input_output_test_update,
+         name="in_out-test-update"),
+
+    path('in_out_test/<int:pk>/delete',
+         views.input_output_test_delete,
+         name="in_out-test-delete"),
+
 ]

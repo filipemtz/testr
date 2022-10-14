@@ -5,29 +5,35 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django import forms
 
 from codetest.models import Section, Question, Submission
+from codetest.models.evaluation_input_output import EvaluationInputOutput
 from codetest.models.submission import SubmissionStatus
+from codetest.utils.group_validator import GroupValidator
 
 
-class QuestionCreate(CreateView):
-    model = Question
-    fields = ['name', 'description', 'language']
+@login_required
+def question_create(request, section_id):
+    if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+        return redirect('courses')
 
-    # this method sets fields that are not supposed to be writen by users, e.g.,
-    # foreign keys, etc.
-    # see https://django.readthedocs.io/en/stable/topics/class-based-views/generic-editing.html
-    def form_valid(self, form):
-        form.instance.section = Section.objects.get(
-            id=self.kwargs['section_id'])
-        return super().form_valid(form)
+    section = get_object_or_404(
+        Section,
+        id=section_id
+    )
 
-    def get_success_url(self):
-        return reverse_lazy('course-detail', kwargs={
-            "pk": self.object.section.course.id
-        })
+    question = Question(
+        section=section,
+        name='New Question',
+        description=''
+    )
+
+    question.save()
+
+    return redirect('question-update', pk=question.id)
 
 
 class QuestionUpdate(UpdateView):
@@ -93,3 +99,14 @@ class QuestionDetailView(generic.DetailView):
             question=self.object
         )
         return context
+
+
+@login_required
+def question_create_input_output_test(request, question_id):
+    if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+        return redirect('courses')
+
+    question = get_object_or_404(Question, id=question_id)
+    new_test = EvaluationInputOutput(question=question)
+    new_test.save()
+    return redirect('question-update', pk=question_id)

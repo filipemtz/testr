@@ -9,6 +9,7 @@ class EvaluationScript(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     script = models.BinaryField()
     script_name = models.CharField(max_length=128)
+    visible = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.script_name}"

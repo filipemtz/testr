@@ -10,6 +10,7 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(default=timezone.now)
     enroll_password = models.UUIDField(default=uuid.uuid4)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-created_at']

@@ -6,9 +6,9 @@ from .question import Question
 
 class EvaluationInputOutput(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    input = models.TextField()
-    output = models.TextField()
-    visible = models.BooleanField()
+    input = models.TextField(blank=True)
+    output = models.TextField(blank=True)
+    visible = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.input} -> {self.output}"
