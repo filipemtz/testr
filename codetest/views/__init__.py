@@ -5,3 +5,4 @@ from .course import *
 from .index import *
 from .registration import *
 from .evaluation_input_output import *
+from .submission import *

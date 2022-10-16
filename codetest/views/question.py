@@ -76,7 +76,7 @@ def perform_question_submission(request, question_id):
                 student=request.user,
                 file=file.read(),
                 file_name=file.name,
-                status=SubmissionStatus.WAITING_EVALUTION
+                status=SubmissionStatus.WAITING_EVALUATION
             )
 
             new_submission.save()

@@ -1,4 +1,5 @@
 {
     "db": "<PATH TO DATABASE FILE>",
-    "secret_key": "<SECRET KEY>"
+    "secret_key": "<SECRET KEY>",
+    "autojudge_directory": "<DIRECTORY TO BE USED BY AUTOJUDGE>"
 }

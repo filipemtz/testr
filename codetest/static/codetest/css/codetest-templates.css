@@ -5,6 +5,7 @@
 
 .h2 {
     font-size: 14pt;
+    padding-bottom: 5px;
 }
 
 .h3 {
@@ -67,4 +68,44 @@ a .bi-x-lg {
 .in-out-test-buttons {
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+.submissions-header {
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: solid;
+    border-width: 1px;
+}
+
+.submissions-rows {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom: solid;
+    border-left: solid;
+    border-right: solid;
+    border-width: 1px;
+}
+
+.submission-status-WE {
+    color: gray;
+    font-style: italic;
+}
+
+.submission-status-FL {
+    color: red;
+}
+
+.submission-status-SC {
+    color: green;
+}
+
+.submission-error-msg {
+    display: list-item;
+    margin-left: 20px;
+}
+
+.submission-detail-content {
+
+    margin: auto;
 }

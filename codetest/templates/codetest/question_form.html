@@ -42,9 +42,6 @@
     </div>
     <br>
 
-    {% if question.evaluationinputoutput_set.all %}
-    {% endif %}
-
     {% for test in question.evaluationinputoutput_set.all %}
     <form action="{% url 'in_out-test-update' test.id %}" method='post'>
         <div class="row input_output_test">

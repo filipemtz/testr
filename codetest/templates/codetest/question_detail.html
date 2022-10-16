@@ -18,6 +18,21 @@
     {{ question.description }}
 </div>
 
+<br>
+
+{% for test in question.evaluationinputoutput_set.all %}
+<div class="row input_output_test">
+    <div class="col">
+        <div><b>Input {{ forloop.counter }}:</b></div>
+        <div>{{ test.input_as_html | safe }}</div>
+    </div>
+    <div class="col">
+        <div><b>Output {{ forloop.counter }}:</b></div>
+        <div>{{ test.output_as_html | safe }}</div>
+    </div>
+</div>
+{% endfor %}
+
 <hr>
 
 <form action="{% url 'question-submission' question.id %}" method="post" enctype="multipart/form-data">
@@ -37,14 +52,29 @@
 </form>
 
 {% if user_submissions %}
+<div class="h2 text-center"> Submissions </div>
+<br>
 <div>
+    <div class="row text-center submissions-header">
+        <div class="col"> Filename </div>
+        <div class="col"> Created At </div>
+        <div class="col"> Status </div>
+        <div class="col"> Report </div>
+    </div>
+
     {% for submission in user_submissions %}
-    <div>
-        Submission at {{ submission.created_at }} - File: {{ submission.file_name }} - Status:
-        {{ submission.status_label }}
-        </a>
+    <div class="row  text-center submissions-rows">
+        <div class="col"> {{ submission.file_name }} </div>
+        <div class="col"> {{ submission.created_at }} </div>
+        <div class='col submission-status-{{submission.status}}'>
+            {{ submission.status_label }}
+        </div>
+        <div class="col">
+            <a href="{% url 'submission-detail' submission.id %}"> View </a>
+        </div>
     </div>
     {% endfor %}
+
 </div>
 
 {% else %}

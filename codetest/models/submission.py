@@ -9,7 +9,7 @@ from .question import Question
 
 
 class SubmissionStatus(models.TextChoices):
-    WAITING_EVALUTION = 'WE', _('Waiting Evaluation')
+    WAITING_EVALUATION = 'WE', _('Waiting Evaluation')
     FAIL = 'FL', _('Fail')
     SUCCESS = 'SC', _('Success')
 
@@ -22,9 +22,10 @@ class Submission(models.Model):
     status = models.TextField(
         max_length=2,
         choices=SubmissionStatus.choices,
-        default=SubmissionStatus.WAITING_EVALUTION
+        default=SubmissionStatus.WAITING_EVALUATION
     )
     created_at = models.DateTimeField(default=timezone.now)
+    report_json = models.TextField(blank=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -33,4 +34,4 @@ class Submission(models.Model):
         return SubmissionStatus(self.status).label
 
     def __str__(self):
-        return self.file_name
+        return f"{self.student.username} - question '{self.question.name}' - file '{self.file_name}'"

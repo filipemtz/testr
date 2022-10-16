@@ -13,6 +13,8 @@ class EvaluationInputOutput(models.Model):
     def __str__(self):
         return f"{self.input} -> {self.output}"
 
-    def get_absolute_url(self):
-        """Returns the URL to access a detail record ."""
-        return reverse('input_output_test', args=[str(self.id)])
+    def input_as_html(self):
+        return self.input.strip().replace('\n', '<br>')
+
+    def output_as_html(self):
+        return self.output.strip().replace('\n', '<br>')

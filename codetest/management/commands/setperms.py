@@ -9,7 +9,8 @@ class Command(BaseCommand):
     help = 'Create groups if they do not exist and assign permissions.'
 
     def add_arguments(self, parser):
-        parser.add_argument('perm_file', type=str, help='path to the json file containing the groups and their permissions.')
+        parser.add_argument(
+            'perm_file', type=str, help='path to the json file containing the groups and their permissions.')
 
     def handle(self, *args, **options):
         with open(options['perm_file'], "r") as f:
@@ -23,14 +24,16 @@ class Command(BaseCommand):
             print(f"Group '{group_name}' created or loaded.")
 
             group.permissions.clear()
-           
+
             for model, permissions in perms.items():
                 if permissions == 'all':
                     permissions = ['view', 'add', 'change', 'delete']
-                
+
                 for permission in permissions:
                     permission_name = f"{permission}_{model}"
-                    permission = Permission.objects.get(codename=permission_name)
-                    group.permissions.add(permission)                    
+                    permission = Permission.objects.get(
+                        codename=permission_name)
+                    group.permissions.add(permission)
 
-                print(f"{group_name} group has '{permissions}' permissions in '{model}'.")
+                print(
+                    f"{group_name} group has '{permissions}' permissions in '{model}'.")

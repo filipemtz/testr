@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -23,6 +23,7 @@ class Question(models.Model):
         default=Language.PYTHON
     )
 
+    time_limit_seconds = models.FloatField(default=10)
     created_at = models.DateTimeField(default=timezone.now)
     visible = models.BooleanField(default=True)
 

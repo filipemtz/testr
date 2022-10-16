@@ -1,6 +1,9 @@
 
 # Backlog
 
+- [ ] autojudge should use docker
+- [ ] teachers define time limits for submissions.
+- [ ] check if "python" is found. If not, use "python3".
 - [ ] Use question's creation flow in the other models.
 - [ ] Drag and drop questions between sections.
 - [ ] Attach files to the question description.
@@ -14,6 +17,7 @@
 the main page (courses). Redirect to the error page instead.
 - [ ] Use JS in the question editor to prevent annoying page jumps.
 - [ ] Better e-mail check.
+- [ ] In autojudge, separate the tests in multiple classes.
 - [ ] Write tests
 
 # Bugs 

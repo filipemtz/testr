@@ -34,6 +34,8 @@ urlpatterns = [
          views.QuestionUpdate.as_view(), name='question-update'),
     path('question/<int:pk>/delete/',
          views.QuestionDelete.as_view(), name='question-delete'),
+    path('question/<int:pk>',
+         views.QuestionDetailView.as_view(), name="question-detail"),
 
     # course enrollment
     path('course/<int:course_id>/enroll/<uuid:enroll_password>',
@@ -42,22 +44,19 @@ urlpatterns = [
          views.unenroll_course, name='unenroll-course'),
 
     # submission
-    path('question/<int:pk>',
-         views.QuestionDetailView.as_view(), name="question-detail"),
     path('question/<int:question_id>/submission',
          views.perform_question_submission, name="question-submission"),
+    path('submission/<int:pk>/',
+         views.SubmissionDetailView.as_view(), name="submission-detail"),
 
     # input/output tests management
     path('question/<int:question_id>/in_out/create',
          views.question_create_input_output_test,
          name="question-create-in_out-test"),
-
     path('in_out_test/<int:pk>/update',
          views.input_output_test_update,
          name="in_out-test-update"),
-
     path('in_out_test/<int:pk>/delete',
          views.input_output_test_delete,
          name="in_out-test-delete"),
-
 ]
