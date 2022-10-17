@@ -14,7 +14,8 @@ import json
 from pathlib import Path
 
 if not Path("config.json").exists():
-    raise FileNotFoundError("Copy and edit the config-sample.json file into config.json .")
+    raise FileNotFoundError(
+        "Copy and edit the config-sample.json file into config.json .")
 
 with open("config.json", "r") as f:
     config_data = json.load(f)
@@ -36,7 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'codetest.apps.CodeTestConfig',
+    'testr.apps.TestrConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,5 +126,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/codetest/'
-LOGIN_URL = '/codetest/accounts/login'
+LOGIN_REDIRECT_URL = '/testr/'
+LOGIN_URL = '/testr/accounts/login'

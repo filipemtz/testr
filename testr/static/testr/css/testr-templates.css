@@ -1,0 +1,125 @@
+.h1 {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.h2 {
+    font-size: 14pt;
+    padding-bottom: 5px;
+}
+
+.h3 {
+    font-size: 10pt;
+    font-weight: normal;
+}
+
+.sections {
+    padding-top: 20px;
+}
+
+.questions {
+    padding-top: 10px;
+}
+
+.section {
+    padding-bottom: 3%;
+}
+
+.question {
+    padding-left: 5%;
+    padding-bottom: 5px;
+}
+
+.new-section,
+.new-course,
+.course {
+    padding-bottom: 20px;
+}
+
+.new-question {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.question-description {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+a .bi-pencil,
+a .bi-x-lg,
+a .bi-eye,
+a .bi-eye-slash {
+    padding-left: 10px;
+}
+
+
+a .bi-eye,
+a .bi-eye-slash {
+    font-size: 12pt;
+}
+
+.visible-False {
+    color: gray;
+    font-style: italic;
+}
+
+.input_output_test {
+    padding-bottom: 20px;
+}
+
+.input_output_test textarea {
+    min-height: 100px;
+}
+
+.in-out-test-buttons,
+.in-out-test-buttons .bi-x-lg {
+    height: 100%;
+    font-size: 14pt;
+    padding-left: 0px;
+}
+
+.in-out-test-buttons {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.submissions-header {
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: solid;
+    border-width: 1px;
+}
+
+.submissions-rows {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom: solid;
+    border-left: solid;
+    border-right: solid;
+    border-width: 1px;
+}
+
+.submission-status-WE {
+    color: gray;
+    font-style: italic;
+}
+
+.submission-status-FL {
+    color: red;
+}
+
+.submission-status-SC {
+    color: green;
+}
+
+.submission-error-msg {
+    display: list-item;
+    margin-left: 20px;
+}
+
+.submission-detail-content {
+
+    margin: auto;
+}

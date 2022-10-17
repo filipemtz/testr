@@ -1,0 +1,51 @@
+{% extends "testr/base.html" %}
+
+{% block content %}
+
+<div class="h1">Courses</div>
+
+<br>
+
+{% if perms.testr.add_course %}
+<div class='new-course'>
+    <a href="{% url 'course-create' %}"><i class="bi bi-plus-lg"></i> New Course</a>
+</div>
+{% endif %}
+
+{% if course_list %}
+<div>
+    {% for course in course_list %}
+    <div class="course">
+        <span class="h2 visible-{{course.visible}}">
+            <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
+        </span>
+
+        {% if perms.testr.change_section %}
+        <a href="{% url 'course-toogle-visibility' course.id %}">
+            {% if course.visible %}
+            <i class="bi bi-eye"></i>
+            {% else %}
+            <i class="bi bi-eye-slash"></i>
+            {% endif %}
+        </a>
+        {% endif %}
+
+        {% if perms.testr.change_section %}
+        <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
+        {% endif %}
+
+        {% if perms.testr.delete_section %}
+        <a href="{% url 'course-delete' course.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+
+<div>There are no courses here yet.</div>
+
+{% endif %}
+
+{% endblock %}

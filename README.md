@@ -1,5 +1,5 @@
 
-# CodeTest
+# Testr
 
 Site for automatically evaluating programming exercises.
 
@@ -51,6 +51,6 @@ python manage.py judge
 
 ## Information for Devs/Contributors
 
-- Permissions are used in ```codetest/template/*_list.html```, ```codetest/template/*_form.html```, and ```codetest/template/*_detail.html``` to control which buttons/links each group can view.
+- Permissions are used in ```testr/template/*_list.html```, ```testr/template/*_form.html```, and ```testr/template/*_detail.html``` to control which buttons/links each group can view.
 
 

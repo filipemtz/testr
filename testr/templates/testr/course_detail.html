@@ -1,0 +1,104 @@
+{% extends "testr/base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+    <span class="h1">{{ course.name }} </span>
+    {% if perms.testr.change_course %}
+    <a href="{% url 'course-update' course.id %}"><i class="bi bi-pencil"></i></a>
+    <div>
+        <i>
+            Enrollment link:
+            <span>
+                http://{{ request.get_host }}{% url 'enroll-course' course.id course.enroll_password %}
+            </span>
+        </i>
+    </div>
+    {% else %}
+    <a href="{% url 'unenroll-course' course.id %}">Unenroll</a>
+    {% endif %}
+</div>
+
+<br>
+<div>
+    <a href="{% url 'courses' %}">Back</a>
+</div>
+<br>
+
+<div class='sections'>
+
+    {% for section in course.section_set.all %}
+    <div class="section">
+        <span class="h2 visible-{{section.visible}}">{{ forloop.counter }}. {{ section.name }}</span>
+
+        {% if perms.testr.change_section %}
+        <a href="{% url 'section-toogle-visibility' section.id %}">
+            {% if section.visible %}
+            <i class="bi bi-eye"></i>
+            {% else %}
+            <i class="bi bi-eye-slash"></i>
+            {% endif %}
+        </a>
+        {% endif %}
+
+        {% if perms.testr.change_section %}
+        <a href="{{ section.get_absolute_url }}"><i class="bi bi-pencil"></i></a>
+        {% endif %}
+
+        {% if perms.testr.delete_section %}
+        <a href="{% url 'section-delete' section.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+        {% endif %}
+
+
+        {% if perms.testr.add_question %}
+        <div class="new-question">
+            <a href="{% url 'question-create' section.id %}"><i class="bi bi-plus-lg"></i> New Question</a>
+        </div>
+        {% endif %}
+
+        <div class='questions'>
+            {% for question in section.question_set.all %}
+            <div class="question">
+                <span class='h3 visible-{{question.visible}}'>
+                    <a href="{% url 'question-detail' question.id %}">{{ forloop.counter }}. {{ question.name }}</a>
+                </span>
+
+                {% if perms.testr.change_question %}
+                <a href="{% url 'question-toogle-visibility' question.id %}">
+                    {% if question.visible %}
+                    <i class="bi bi-eye"></i>
+                    {% else %}
+                    <i class="bi bi-eye-slash"></i>
+                    {% endif %}
+                </a>
+                {% endif %}
+
+                {% if perms.testr.change_question %}
+                <a href="{{ question.get_absolute_url }}"><i class="bi bi-pencil"></i></a>
+                {% endif %}
+
+                {% if perms.testr.delete_question %}
+                <a href="{% url 'question-delete' question.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+    {% if perms.testr.add_section %}
+    <div class="new-section">
+        <a href="{% url 'section-create' course.id %}"><i class="bi bi-plus-lg"></i> New Section </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<br>
+
+<div>
+    <a href="{% url 'courses' %}">Back</a>
+</div>
+
+{% endblock %}

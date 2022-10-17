@@ -1,0 +1,133 @@
+{% load static %}
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Testr</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+        .dont-break-out {
+            /* These are technically the same, but use both */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            /* This is the dangerous one in WebKit, as it breaks things wherever */
+            word-break: break-all;
+            /* Instead use this non-standard one: */
+            word-break: break-word;
+            /* Adds a hyphen where the word breaks, if supported (No Blink) */
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link href="{% static 'testr/css/navbar.css' %}" rel="stylesheet">
+    <link href="{% static 'testr/css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'testr/css/widgets.css' %}" rel="stylesheet">
+    <link href="{% static 'testr/css/testr-templates.css' %}" rel="stylesheet">
+
+    {% block css %}
+    {% endblock %}
+
+</head>
+
+<body>
+    <!-- navigation bar -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-collapse d-flex">
+                <div class="p-2 flex-grow-1">
+                    <ul class="navbar-nav">
+                        <li class="nav-text">
+                            <a class="nav-link active" href="{% url 'index' %}">
+                                <div class="site-name">
+                                    Testr
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-2">
+                    <button class="btn my-icon-class nav-icon" title='edit account' data-bs-toggle="modal"
+                        data-bs-target="#details-editor-modal" onclick="not_implemented()">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                </div>
+
+                <div class="p-2">
+                    <div class="header-text text-center">
+                        {{ user.username }}
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div class="header-text text-center">
+                        <a href="{% url 'logout' %}?next={% url 'login' %}">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id='error'></div>
+
+    <br>
+
+    <!-- spinner modal -->
+    <div id='spinner-modal' class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-body center">
+                <div class="spinner-border text-light" style="width: 10rem; height: 10rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="task_lists">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Feedback Message -->
+    <div id="feedback_box" onclick="$(this).fadeOut();">
+        <span id="feedback_message"></span>
+    </div>
+
+    <div class="footer">
+        Testr @ 2022
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+    <script type="text/javascript" src="{% static 'testr/js/base.js' %}"></script>
+    <script type="text/javascript" src="{% static 'testr/js/project.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // if there is a form in the page, autofocus on the first element.
+            if ($("form").length) {
+                $('form:first *:input[type!=hidden]:first').focus();
+            }
+        });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>
