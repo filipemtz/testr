@@ -41,8 +41,12 @@
     padding-bottom: 10px;
 }
 
-.question-description {
+.question-language {
     padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.question-description {
     padding-bottom: 20px;
 }
 

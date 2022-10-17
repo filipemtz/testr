@@ -33,6 +33,9 @@ class Question(models.Model):
     def __str__(self):
         return self.name
 
+    def language_label(self):
+        return Language(self.language).label
+
     def get_absolute_url(self):
         """Returns the URL to access a detail record ."""
         return reverse('question-update', args=[str(self.id)])

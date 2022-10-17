@@ -158,6 +158,8 @@ class BaseJudge(ABC):
                 input=input_str,
                 capture_output=True,
                 timeout=time_limit_seconds,
+                # because some cmds have spaces (e.g., "python program.py")
+                shell=True, 
                 text=True)
 
         except subprocess.TimeoutExpired:

@@ -14,11 +14,23 @@
     {% endif %}
 </div>
 
+<div class="question-language">
+    <b>Programming Language:</b> {{ question.language_label }}
+</div>
+
 <div class="question-description">
-    {{ question.description }}
+    <div> <b> Question: </b> </div>
+    <br>
+    <div> {{ question.description }} </div>
 </div>
 
 <br>
+
+{% if question.evaluationinputoutput_set.all %}
+<div> <b> Tests: </b> </div>
+<hr>
+<br>
+{% endif %}
 
 {% for test in question.evaluationinputoutput_set.all %}
 <div class="row input_output_test">

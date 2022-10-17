@@ -41,8 +41,8 @@ class QuestionUpdate(UpdateView):
     fields = ['name', 'description', 'language']
 
     def get_success_url(self):
-        return reverse_lazy('course-detail', kwargs={
-            "pk": self.object.section.course.id
+        return reverse_lazy('question-update', kwargs={
+            "pk": self.object.id
         })
 
 
