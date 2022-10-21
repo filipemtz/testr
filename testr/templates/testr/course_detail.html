@@ -28,6 +28,7 @@
 <div class='sections'>
 
     {% for section in course.section_set.all %}
+    {% if perms.testr.change_section or section.visible %}
     <div class="section">
         <span class="h2 visible-{{section.visible}}">{{ forloop.counter }}. {{ section.name }}</span>
 
@@ -58,6 +59,7 @@
 
         <div class='questions'>
             {% for question in section.question_set.all %}
+            {% if perms.testr.change_question or question.visible %}
             <div class="question">
                 <span class='h3 visible-{{question.visible}}'>
                     <a href="{% url 'question-detail' question.id %}">{{ forloop.counter }}. {{ question.name }}</a>
@@ -81,10 +83,12 @@
                 <a href="{% url 'question-delete' question.id %}"><i class="bi bi-x-lg text-danger"></i></a>
                 {% endif %}
             </div>
+            {% endif %}
             {% endfor %}
         </div>
 
     </div>
+    {% endif %}
     {% endfor %}
 
     {% if perms.testr.add_section %}

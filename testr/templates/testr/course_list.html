@@ -15,6 +15,7 @@
 {% if course_list %}
 <div>
     {% for course in course_list %}
+    {% if perms.testr.change_section or course.visible %}
     <div class="course">
         <span class="h2 visible-{{course.visible}}">
             <a href="{{ course.get_absolute_url }}">{{ course.name }}</a>
@@ -39,6 +40,7 @@
         {% endif %}
 
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 
