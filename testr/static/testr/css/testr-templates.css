@@ -69,23 +69,35 @@ a .bi-eye-slash {
 }
 
 .input_output_test {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .input_output_test textarea {
     min-height: 100px;
 }
 
-.in-out-test-buttons,
-.in-out-test-buttons .bi-x-lg {
+.in-out-test-buttons {
     height: 100%;
-    font-size: 14pt;
+    padding-top: 0px;
+    padding-bottom: 0px;
     padding-left: 0px;
+    padding-right: 0px;
+    text-align: right;
+
 }
 
-.in-out-test-buttons {
-    padding-top: 20px;
-    padding-bottom: 20px;
+.in-out-test-buttons .bi-x,
+.in-out-test-buttons .bi-eye,
+.in-out-test-buttons .bi-eye-slash {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.in-out-test-buttons .bi-eye,
+.in-out-test-buttons .bi-eye-slash {
+    font-size: 12pt;
 }
 
 .submissions-header {

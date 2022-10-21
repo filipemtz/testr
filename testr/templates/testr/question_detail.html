@@ -33,6 +33,7 @@
 {% endif %}
 
 {% for test in question.evaluationinputoutput_set.all %}
+{% if test.visible %}
 <div class="row input_output_test">
     <div class="col">
         <div><b>Input {{ forloop.counter }}:</b></div>
@@ -43,6 +44,7 @@
         <div>{{ test.output_as_html | safe }}</div>
     </div>
 </div>
+{% endif %}
 {% endfor %}
 
 <hr>

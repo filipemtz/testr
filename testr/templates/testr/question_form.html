@@ -45,19 +45,31 @@
     {% for test in question.evaluationinputoutput_set.all %}
     <form action="{% url 'in_out-test-update' test.id %}" method='post'>
         <div class="row input_output_test">
-            <div class="col">
+            <div class="col-5">
                 <textarea name="input" id="input">{{ test.input }}</textarea>
             </div>
-            <div class="col">
+            <div class="col-5">
                 <textarea name="output" id="output">{{ test.output }}</textarea>
             </div>
-            <div class="col-1">
-                <div class="d-flex flex-column text-center in-out-test-buttons">
+            <div class="col-2">
+                <div class="d-flex flex-column in-out-test-buttons">
                     <div class="mb-auto">
                         <button type="submit" title='save test' class="btn btn-success">
                             <i class="bi bi-check-circle"></i>
                         </button>
                     </div>
+                    <div>
+                        <a href="{% url 'in_out-test-toogle-visibility' test.id %}" title='toogle visibility of test'>
+                            <div class="btn">
+                                {% if test.visible %}
+                                <i class="bi bi-eye"></i>
+                                {% else %}
+                                <i class="bi bi-eye-slash"></i>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    <br>
                     <div>
                         <a href="{% url 'in_out-test-delete' test.id %}" title='delete test'>
                             <div class="btn btn-danger">

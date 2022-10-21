@@ -38,3 +38,10 @@ def input_output_test_delete(request, pk):
     question_id = test.question.id
     test.delete()
     return redirect(f'question-update', pk=question_id)
+
+
+def input_output_test_toogle_visibility(self, pk):
+    test = get_object_or_404(EvaluationInputOutput, id=pk)
+    test.visible = not test.visible
+    test.save()
+    return redirect(f'question-update', pk=test.question.id)

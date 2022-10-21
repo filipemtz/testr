@@ -66,4 +66,7 @@ urlpatterns = [
     path('in_out_test/<int:pk>/delete',
          views.input_output_test_delete,
          name="in_out-test-delete"),
+    path('in_out_test/<int:pk>/toogle_visibility/',
+         views.input_output_test_toogle_visibility,
+         name="in_out-test-toogle-visibility"),
 ]
