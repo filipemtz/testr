@@ -84,7 +84,7 @@ if config_data['db']['type'] == 'sqlite':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': config_data['name'],
+            'NAME': config_data['db']['name'],
         }
     }
 elif config_data['db']['type'] == 'postgre':
