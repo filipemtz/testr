@@ -23,9 +23,6 @@ def check_if_user_exists(request, error_msgs):
 
 
 def check_if_fields_are_valid(request, error_msgs):
-    if request.POST['role'] not in ['student', 'teacher']:
-        error_msgs.append(f"invalid role {request.POST['role']}.")
-
     try:
         validate_email(request.POST['email'])
     except ValidationError as e:
@@ -39,7 +36,6 @@ def signup_is_valid(request):
     error_msgs = []
 
     fields = [
-        'role',
         'firstname',
         'lastname',
         'username',
@@ -64,6 +60,8 @@ def signup_is_valid(request):
 
 
 def signup_user(request):
+    user_group = Group.objects.get(name='student')
+
     new_user = User.objects.create_user(
         request.POST['username'],
         request.POST['email'],
@@ -72,7 +70,6 @@ def signup_user(request):
     new_user.last_name = request.POST['lastname']
     new_user.save()
 
-    user_group = Group.objects.get(name=request.POST['role'])
     new_user.groups.clear()
     new_user.groups.add(user_group)
     new_user.save()  # TODO: check if this is necessary.

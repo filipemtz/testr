@@ -4,6 +4,7 @@ from typing import Any, Dict
 from django.views import generic
 from testr.models import Submission
 from testr.models.submission import SubmissionStatus
+from django.shortcuts import get_object_or_404, redirect
 
 
 class SubmissionDetailView(generic.DetailView):

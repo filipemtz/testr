@@ -80,13 +80,26 @@ WSGI_APPLICATION = 'global.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config_data["db"],
+if config_data['db']['type'] == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': config_data['db_name'],
+        }
     }
-}
-
+elif config_data['db']['type'] == 'postgre':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config_data['db']['name'],
+            'USER': config_data['db']['user'],
+            'PASSWORD': config_data['db']['password'],
+            'HOST': config_data['db']['host'],
+            'PORT': config_data['db']['port'],
+        }
+    }
+else:
+    raise Exception(f"Invalid database type \"{config_data['db']['type']}\"")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

@@ -1,5 +1,12 @@
 {
-    "db": "<PATH TO DATABASE FILE>",
+    "db": {
+        "type": "<TYPE OF DB: sqlite | postgre",
+        "name": "<NAME OF DB OR PATH IF SQLITE>",
+        "user": "<DB USER>",
+        "password": "<DB PASSWORD>",
+        "host": "<DB HOST>",
+        "port": "<DB PORT (EMPTY IF DEFAULT)>"
+    },
     "secret_key": "<SECRET KEY>",
-    "autojudge_directory": "<DIRECTORY TO BE USED BY AUTOJUDGE>"
+    "autojudge_directory": "<DIRECTORY TO BE USED BY AUTOJUDGE>",
 }

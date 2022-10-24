@@ -67,6 +67,9 @@
 
 {% if user_submissions %}
 <div class="h2 text-center"> Submissions </div>
+<div class="text-center">
+    <a href="{% url 'question-rejudge' question.id %}"> Run Autojudge Again </a>
+</div>
 <br>
 <div>
     <div class="row text-center submissions-header">

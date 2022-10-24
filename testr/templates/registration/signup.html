@@ -16,15 +16,6 @@
     <form method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         <div class="row form-row">
-            <div class="col-4">Role:</div>
-            <div class="col-8">
-                <select name="role" id="role">
-                    <option value="student" selected>Student</option>
-                    <option value="teacher">Teacher</option>
-                </select>
-            </div>
-        </div>
-        <div class="row form-row">
             <div class="col-4">First Name:</div>
             <div class="col-8"><input id='firstname' name="firstname" type="text" /></div>
         </div>

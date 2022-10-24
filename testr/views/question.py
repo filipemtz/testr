@@ -38,7 +38,14 @@ def question_create(request, section_id):
 
 class QuestionUpdate(UpdateView):
     model = Question
-    fields = ['name', 'description', 'language']
+    fields = [
+        'name',
+        'description',
+        'language',
+        'time_limit_seconds',
+        "memory_limit",
+        "cpu_limit"
+    ]
 
     def get_success_url(self):
         return reverse_lazy('question-update', kwargs={
@@ -117,3 +124,13 @@ def question_toogle_visibility(request, pk):
     question.visible = not question.visible
     question.save()
     return redirect('course-detail', pk=question.section.course.id)
+
+
+def question_rejudge(request, pk):
+    question = get_object_or_404(Question, id=pk)
+    submissions = question.submission_set.all()
+    if submissions.count() >= 0:
+        most_recent = submissions.first()
+        most_recent.status = SubmissionStatus.WAITING_EVALUATION
+        most_recent.save()
+    return redirect('question-detail', pk=pk)

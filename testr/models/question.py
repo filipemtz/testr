@@ -23,7 +23,9 @@ class Question(models.Model):
         default=Language.PYTHON
     )
 
-    time_limit_seconds = models.FloatField(default=10)
+    time_limit_seconds = models.FloatField(default=30)
+    memory_limit = models.FloatField(default=200)
+    cpu_limit = models.FloatField(default=0.25)
     created_at = models.DateTimeField(default=timezone.now)
     visible = models.BooleanField(default=True)
 

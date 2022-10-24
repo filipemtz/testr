@@ -15,7 +15,8 @@ class PythonJudge(BaseJudge):
             return '', False
         elif len(files) == 1:
             # if there is only one python file, assume it is the correct
-            return f"python {files[0]}", True
+            p = self._clean_program_name(files[0], self.test_dir)
+            return f"python {p}", True
         else:
             # search for a main.py file.
             main_files = []
@@ -24,7 +25,8 @@ class PythonJudge(BaseJudge):
                     main_files.append(f)
 
             if len(main_files) == 1:
-                return f"python {main_files[0]}", True
+                p = self._clean_program_name(main_files[0], self.test_dir)
+                return f"python {p}", True
 
             # search for the one with __main__.
             runnable_files = []
@@ -36,7 +38,8 @@ class PythonJudge(BaseJudge):
                     runnable_files.append(f)
 
             if len(runnable_files) == 1:
-                return f"python {runnable_files[0]}", True
+                p = self._clean_program_name(runnable_files[0], self.test_dir)
+                return f"python {p}", True
 
             self.report["error_msgs"].append(
                 "Python files were found, but autojudge could not figure out "
@@ -45,3 +48,19 @@ class PythonJudge(BaseJudge):
             )
 
             return "", False
+
+    def _clean_program_name(self, program_name, test_dir):
+        # we remove the run directory because docker will add it later.
+        # TODO: the replace in self.test_dir is already performed later in
+        # base_judge.py:judge(). Improve this.
+        d = str(test_dir).replace("\\", "/")
+        p = program_name.replace("\\", "/")
+
+        if p.find(d) == -1:
+            raise Exception(
+                f"Directory '{d}' not found in program path '{p}'.")
+
+        p = p[len(d):]
+        p = p.strip("/")
+
+        return p

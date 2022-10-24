@@ -1,0 +1,1 @@
+docker build -t testr_docker_image .

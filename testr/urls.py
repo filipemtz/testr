@@ -55,6 +55,8 @@ urlpatterns = [
          views.perform_question_submission, name="question-submission"),
     path('submission/<int:pk>/',
          views.SubmissionDetailView.as_view(), name="submission-detail"),
+    path('question/<int:pk>/rejudge',
+         views.question_rejudge, name="question-rejudge"),
 
     # input/output tests management
     path('question/<int:question_id>/in_out/create',
