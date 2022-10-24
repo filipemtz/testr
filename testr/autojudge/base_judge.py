@@ -15,6 +15,11 @@ from testr.models.submission import Submission
 from testr.utils.io import unzip
 
 
+docker_known_warnings = [
+    "WARNING: Your kernel does not support swap limit capabilities or the cgroup is not mounted. Memory limited without swap."
+]
+
+
 class BaseJudge(ABC):
     def __init__(self, keep_files: bool):
         self.config = json.load(open("config.json"))
@@ -187,23 +192,8 @@ class BaseJudge(ABC):
                 test_report
             )
 
-            # DEBUG:
-            # print("\n-------------------------------------")
-            # print("input:")
-            # print(input_str)
-            # print("expected output:")
-            # print(test_report["expected_output"])
-            # print("time limit exceeded:", test_report['time_limit_exceeded'])
-
             # run report will be defined if time limit is not exceeded.
             if run_report:
-                # DEBUG:
-                # print("return code:")
-                # print(run_report.returncode)
-                # print("program output:")
-                # print(run_report.stdout)
-                # print("program error:")
-                # print(run_report.stderr)
                 self._write_input_output_test_report(run_report, test_report)
 
             self.report["input_output_test_report"]["tests_reports"].append(
@@ -325,6 +315,9 @@ class BaseJudge(ABC):
         test_report["program_errors"] = run_report.stderr
         test_report["return_code"] = run_report.returncode
 
+        test_report["program_errors"] = \
+            self._discard_known_errors(test_report["program_errors"])
+
         # Split without args does a great job cleaning the strings:
         # it removes: "\r", "\t", double spaces, spaces before new
         # lines, etc. If the sequence of words is equals, the program
@@ -337,6 +330,11 @@ class BaseJudge(ABC):
             (not test_report["output_mismatch"]) and \
             (test_report["return_code"] == 0) and \
             (len(test_report["program_errors"]) == 0)
+
+    def _discard_known_errors(self, errors: str):
+        for msg in docker_known_warnings:
+            errors = errors.replace(msg, "")
+        return errors.strip()
 
     def _cleanup(self):
         # clean up resources used for running the tests, e.g., remove the test
