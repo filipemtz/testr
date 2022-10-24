@@ -4,26 +4,15 @@ import uuid
 import json
 import time
 import shutil
-import zipfile
 import subprocess
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Tuple
+from datetime import datetime
 from pathlib import Path
+
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import Submission
-from datetime import datetime
-
-
-def unzip(zip_file: str, dest_dir: str):
-    """
-    based on https://gist.github.com/swaroopjcse/6d789188a9cdb21d725767716669557f
-    """
-    try:
-        zfile = zipfile.ZipFile(zip_file)
-        for filename in zfile.namelist():
-            zfile.extract(filename, dest_dir)
-    except zipfile.BadZipfile:
-        print(f"Cannot extract '{zip_file}': Not a valid zipfile.")
+from testr.utils.io import unzip
 
 
 class BaseJudge(ABC):
@@ -53,11 +42,10 @@ class BaseJudge(ABC):
         d = os.path.normpath(self.test_dir)
         d = d.replace("\\", "/")
 
-        print("d:", d)
-        print("run_cmd:", run_cmd)
+        if self.config["use_docker"] == "True":
+            run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{test_uuid} -w /{test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
 
-        run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{test_uuid} -w /{test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
-        print("run command:", run_cmd)
+        print("\nrun command:", run_cmd, '\n')
 
         if success:
             self._run_input_output_tests(run_cmd)
@@ -98,6 +86,7 @@ class BaseJudge(ABC):
             os.remove(file_name_str)
 
     """
+    # TODO: extract the methods for saving files from below.
     def _run_input_output_tests_docker(self, run_cmd: str):
         # get the question inputs and outputs from the db
         in_out_tests = EvaluationInputOutput.objects.filter(
@@ -248,6 +237,8 @@ class BaseJudge(ABC):
                 # because some cmds have spaces (e.g., "python program.py")
                 shell=True,
                 text=True)
+
+            print("Run Report:", run_report, "\n")
 
             # when running with docker, we use the timeout function that returns
             # error 124 when the program takes longer to finish than than the
