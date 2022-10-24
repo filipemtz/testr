@@ -9,5 +9,8 @@
     },
     "secret_key": "<SECRET KEY>",
     "autojudge_directory": "<DIRECTORY TO BE USED BY AUTOJUDGE>",
-    "use_docker": "True | False"
+    "use_docker": "True | False",
+    "allowed_hosts": [
+        "<LIST OF ALLOWED HOSTS>"
+    ]
 }
