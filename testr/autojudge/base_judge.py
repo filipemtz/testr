@@ -9,15 +9,11 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Tuple
 from datetime import datetime
 from pathlib import Path
+from testr.autojudge.unsafe_runner import UnsafeRunner
 
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import Submission
 from testr.utils.io import unzip
-
-
-docker_known_warnings = [
-    "WARNING: Your kernel does not support swap limit capabilities or the cgroup is not mounted. Memory limited without swap."
-]
 
 
 class BaseJudge(ABC):
@@ -26,7 +22,7 @@ class BaseJudge(ABC):
         self._keep_files = keep_files
 
     def judge(self, submission: Submission) -> Dict[str, Any]:
-        test_uuid = str(uuid.uuid4())
+        self.test_uuid = str(uuid.uuid4())
         self.submission = submission
         self.question = submission.question
 
@@ -34,26 +30,22 @@ class BaseJudge(ABC):
         # in the end of the valuation.
         date_format = "%d/%m/%Y %H:%M:%S"
         dt = datetime.now().strftime(date_format)
-        self.report = {"error_msgs": [], "start_at": dt, "uuid": test_uuid}
+        self.report = {"error_msgs": [],
+                       "start_at": dt, "uuid": self.test_uuid}
 
-        self._prepare_directory_and_files_for_test(test_uuid, submission)
+        self._prepare_directory_and_files_for_test(self.test_uuid, submission)
         run_cmd, success = self._evaluate_files_and_prepare_executable()
 
-        # if success:
-        #    self._run_input_output_tests_docker(run_cmd)
-
-        # add instructions to run the program inside docker
-        # docker requires using paths with "/" as separator
-        d = os.path.normpath(self.test_dir)
-        d = d.replace("\\", "/")
-
-        if self.config["use_docker"] == "True":
-            run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{test_uuid} -w /{test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
-
-        print("\nrun command:", run_cmd, '\n')
-
         if success:
-            self._run_input_output_tests(run_cmd)
+            runner = UnsafeRunner(run_cmd)
+
+            if self.config["use_docker"] == "True":
+                # docker requires using paths with "/" as separator
+                d = os.path.normpath(self.test_dir)
+                d = d.replace("\\", "/")
+                run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{self.test_uuid} -w /{self.test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
+
+            self._run_input_output_tests(runner)
 
         self._cleanup()
 
@@ -90,79 +82,7 @@ class BaseJudge(ABC):
             unzip(file_name_str, str(self.test_dir))
             os.remove(file_name_str)
 
-    """
-    # TODO: extract the methods for saving files from below.
-    def _run_input_output_tests_docker(self, run_cmd: str):
-        # get the question inputs and outputs from the db
-        in_out_tests = EvaluationInputOutput.objects.filter(
-            question=self.question)
-
-        # we assume success if there are no tests
-        self.report["input_output_test_report"] = {
-            "tests_reports": []
-        }
-
-        script_path = os.path.join(self.test_dir, "run.sh")
-        script_file = open(script_path, "w")
-
-        for idx, in_out_test in enumerate(in_out_tests):
-            test_report = {
-                "input": in_out_test.input,
-                "expected_output": in_out_test.output,
-                "visible": in_out_test.visible,
-                "time_limit_exceeded": False,
-                "success": True,
-            }
-
-            # clean the input string
-            input_str = in_out_test.input.strip().replace("\r", "")
-            output_str = in_out_test.output.strip().replace("\r", "")
-
-            # save input and output to a file
-            in_file = f"test_{idx}_in.txt"
-            out_file = f"test_{idx}_out.txt"
-            program_file = f"test_{idx}_program.txt"
-            error_file = f"test_{idx}_error.txt"
-            diff_file = f"test_{idx}_diff.txt"
-
-            in_path = os.path.join(self.test_dir, in_file)
-            out_path = os.path.join(self.test_dir, out_file)
-
-            with open(in_path, "w") as f:
-                f.write(input_str)
-
-            with open(out_path, "w") as f:
-                f.write(output_str)
-
-            script_file.write(
-                f"timeout {self.question.time_limit_seconds} {run_cmd} < {in_file} > {program_file} 2> {error_file}\n")
-
-            script_file.write(
-                f"diff {out_file} {program_file} > {diff_file}\n")
-
-        script_file.close()
-
-        #f = open(os.path.join(self.test_dir, "Dockerfile"))
-        # f.write("\n")
-        
-            # run report will be defined if time limit is not exceeded.
-            if run_report:
-                # DEBUG:
-                # print("return code:")
-                # print(run_report.returncode)
-                # print("program output:")
-                # print(run_report.stdout)
-                # print("program error:")
-                # print(run_report.stderr)
-                self._write_input_output_test_report(run_report, test_report)
-
-            self.report["input_output_test_report"]["tests_reports"].append(
-                test_report)
-
-        self._write_error_messages_from_tests()
-    """
-
-    def _run_input_output_tests(self, run_cmd: str):
+    def _run_input_output_tests(self, runner):
         # get the question inputs and outputs from the db
         in_out_tests = EvaluationInputOutput.objects.filter(
             question=self.question)
@@ -184,6 +104,7 @@ class BaseJudge(ABC):
             # clean the input string
             input_str = in_out_test.input.strip().replace("\r", "")
 
+            '''
             # run the test
             run_report = self._run_test(
                 run_cmd,
@@ -191,6 +112,7 @@ class BaseJudge(ABC):
                 self.question.time_limit_seconds,
                 test_report
             )
+            '''
 
             # run report will be defined if time limit is not exceeded.
             if run_report:
@@ -200,7 +122,7 @@ class BaseJudge(ABC):
                 test_report)
 
         self._write_error_messages_from_tests()
-
+    '''
     def _run_test(self,
                   run_cmd: str,
                   input_str: str,
@@ -248,6 +170,7 @@ class BaseJudge(ABC):
         test_report["running_time"] = end - start
 
         return run_report
+    '''
 
     def _write_error_messages_from_tests(self):
 
@@ -331,11 +254,6 @@ class BaseJudge(ABC):
             (test_report["return_code"] == 0) and \
             (len(test_report["program_errors"]) == 0)
 
-    def _discard_known_errors(self, errors: str):
-        for msg in docker_known_warnings:
-            errors = errors.replace(msg, "")
-        return errors.strip()
-
     def _cleanup(self):
         # clean up resources used for running the tests, e.g., remove the test
         # directory.
@@ -344,6 +262,74 @@ class BaseJudge(ABC):
             shutil.rmtree(self.test_dir)
 
 
-class NotImplementedJudge(BaseJudge):
-    def judge(self, submission: Submission) -> Dict[str, Any]:
-        raise NotImplementedError()
+"""
+# TODO: extract the methods for saving files from below.
+def _run_input_output_tests_docker(self, run_cmd: str):
+    # get the question inputs and outputs from the db
+    in_out_tests = EvaluationInputOutput.objects.filter(
+        question=self.question)
+
+    # we assume success if there are no tests
+    self.report["input_output_test_report"] = {
+        "tests_reports": []
+    }
+
+    script_path = os.path.join(self.test_dir, "run.sh")
+    script_file = open(script_path, "w")
+
+    for idx, in_out_test in enumerate(in_out_tests):
+        test_report = {
+            "input": in_out_test.input,
+            "expected_output": in_out_test.output,
+            "visible": in_out_test.visible,
+            "time_limit_exceeded": False,
+            "success": True,
+        }
+
+        # clean the input string
+        input_str = in_out_test.input.strip().replace("\r", "")
+        output_str = in_out_test.output.strip().replace("\r", "")
+
+        # save input and output to a file
+        in_file = f"test_{idx}_in.txt"
+        out_file = f"test_{idx}_out.txt"
+        program_file = f"test_{idx}_program.txt"
+        error_file = f"test_{idx}_error.txt"
+        diff_file = f"test_{idx}_diff.txt"
+
+        in_path = os.path.join(self.test_dir, in_file)
+        out_path = os.path.join(self.test_dir, out_file)
+
+        with open(in_path, "w") as f:
+            f.write(input_str)
+
+        with open(out_path, "w") as f:
+            f.write(output_str)
+
+        script_file.write(
+            f"timeout {self.question.time_limit_seconds} {run_cmd} < {in_file} > {program_file} 2> {error_file}\n")
+
+        script_file.write(
+            f"diff {out_file} {program_file} > {diff_file}\n")
+
+    script_file.close()
+
+    # f = open(os.path.join(self.test_dir, "Dockerfile"))
+    # f.write("\n")
+    
+        # run report will be defined if time limit is not exceeded.
+        if run_report:
+            # DEBUG:
+            # print("return code:")
+            # print(run_report.returncode)
+            # print("program output:")
+            # print(run_report.stdout)
+            # print("program error:")
+            # print(run_report.stderr)
+            self._write_input_output_test_report(run_report, test_report)
+
+        self.report["input_output_test_report"]["tests_reports"].append(
+            test_report)
+
+    self._write_error_messages_from_tests()
+"""

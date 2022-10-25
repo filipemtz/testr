@@ -1,14 +1,15 @@
 
 import json
+from testr.autojudge.cpp_judge import CppJudge
 from testr.models.question import Language
 from testr.models.submission import Submission, SubmissionStatus
-from .base_judge import BaseJudge, NotImplementedJudge
+from .base_judge import BaseJudge
 from .python_judge import PythonJudge
 
 
 class AutoJudgeRunner:
     judges = {
-        Language.CCPP.value: NotImplementedJudge,
+        Language.CCPP.value: CppJudge,
         Language.PYTHON.value: PythonJudge,
     }
 

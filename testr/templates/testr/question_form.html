@@ -87,7 +87,7 @@
 <br>
 <br>
 <div class="form-widgets-area">
-    <a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
+    <a href="{% url 'course-detail' question.section.course.id %}">Back</a>
 </div>
 
 {% endblock %}

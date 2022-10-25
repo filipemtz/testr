@@ -10,7 +10,7 @@ the respective section below.
 
 Install docker by following the instructions in the [documentation](https://docs.docker.com/engine/install). The common commands are given in the specific section below.
 
-Build the docker image used by the autojudge: 
+Build the docker image used by the autojudge with the following instruction. Feel free to try and change the Dockerfile in data/docker_imgs/base to further install things.
 
 ```
 # linux

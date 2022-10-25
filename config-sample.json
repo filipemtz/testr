@@ -12,5 +12,10 @@
     "use_docker": "True | False",
     "allowed_hosts": [
         "<LIST OF ALLOWED HOSTS>"
-    ]
+    ],
+    "cpp": {
+        "use_valgrind": "True | False (requires that valgrind is installed - NOT SUPPORTED YET.)",
+        "flags": "flags to use when makefile is not submitted",
+        "cc": "compiler to use when makefile is not submitted"
+    }
 }
