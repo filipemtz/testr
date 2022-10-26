@@ -51,8 +51,10 @@ class UnsafeRunner(RunnerInterface):
 
             for o in discard_outputs:
                 result.stdout = result.stdout.replace(o, "")
+                result.stderr = result.stderr.replace(o, "")
 
             result.stdout = result.stdout.strip()
+            result.stderr = result.stderr.strip()
 
         except subprocess.TimeoutExpired:
             time_limit_exceeded = True
