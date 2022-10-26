@@ -17,6 +17,11 @@ class Command(BaseCommand):
             help='Use this option to evaluate all submissions again.')
 
         parser.add_argument(
+            '--verbose',
+            action='store_true',
+            help='Control the amount of output printed to the screen.')
+
+        parser.add_argument(
             '--keep',
             action='store_true',
             help='Prevent deletion of files in autojudge directory.')
@@ -28,6 +33,8 @@ class Command(BaseCommand):
             help='Number of seconds autojudge will sleep when there are no submissions to evaluate.')
 
     def handle(self, *args, **options):
+        print("\nAutojudge running.\n")
+
         if options['rerun']:
             Submission.objects.update(
                 status=SubmissionStatus.WAITING_EVALUATION)
@@ -38,11 +45,12 @@ class Command(BaseCommand):
                 status=SubmissionStatus.WAITING_EVALUATION)
 
             if submissions.count() == 0:
-                print(
-                    f"No submissions without evaluation were found. Sleeping for {options['sleep_time']} seconds.")
+                # print(
+                #    f"No submissions without evaluation were found. Sleeping for {options['sleep_time']} seconds.")
                 sleep(options['sleep_time'])
             else:
                 # last is selected because by default submissions are ordered by
                 # submission time, with the most recent first.
                 selected_submission = submissions.first()
-                AutoJudgeRunner.evaluate(selected_submission, options['keep'])
+                AutoJudgeRunner.evaluate(
+                    selected_submission, options['keep'], options['verbose'])

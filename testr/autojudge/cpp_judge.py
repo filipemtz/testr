@@ -12,7 +12,7 @@ class CppJudge(BaseJudge):
     SRC_PTRN = ['*.c', '*.cc', '*.cpp']
     MAKE_PTRN = ['makefile', 'Makefile']
     HEADER_PTRN = ["*.h", "*.hpp"]
-    IGNORE_PTRN = [".o", ".a", ".so"]
+    IGNORE_PTRN = ["*.o", "*.a", "*.so", "*.dll"]
 
     def _get_files_with_patterns(self, patterns):
         files = []
@@ -33,24 +33,58 @@ class CppJudge(BaseJudge):
         first_dir = self._find_first_directory(self.src_files + self.makefiles)
         self.test_dir = first_dir
 
+        self._compile()
+
+        # if any compilation error happened
+        if len(self.report["error_msgs"]) > 0:
+            return '', False
+
+        # run the program with docker and check for runtime errors
+        headers = self._get_files_with_patterns(CppJudge.HEADER_PTRN)
+        binaries = self._get_files_with_patterns(CppJudge.IGNORE_PTRN)
+        known_files = self.src_files + self.makefiles + headers + binaries
+
+        all_files = glob(f"{self.test_dir}/**/*", recursive=True)
+
+        executables = list(filter(
+            lambda f: (not os.path.isdir(f)) and (f not in known_files),
+            all_files
+        ))
+
+        if len(executables) == 0:
+            self.report["error_msgs"].append(
+                f"Compilation seems to have succeeded, but executable was not found.")
+            return '', False
+        elif len(executables) > 1:
+            candidates = [str(Path(f).name) for f in executables]
+            self.report["error_msgs"].append(
+                f"More than one executable candidate was found: {candidates}.<BR>Update the makefile to generate a single executable.")
+            return '', False
+
+        return executables[0], True
+
+    def _compile(self):
         compilation_cmd = self._get_compilation_command()
 
         # make with docker and check for compilation errors
-        runner = UnsafeRunner(
-            compilation_cmd,
-            timeout_seconds=120,
-        )
+        if self.config['use_docker']:
+            runner = DockerRunner(
+                compilation_cmd,
+                timeout_seconds=120,
+                docker_dir=f"/submissions/{self.test_uuid}/",
+                host_dir=self.test_dir
+            )
+        else:
+            runner = UnsafeRunner(
+                compilation_cmd,
+                timeout_seconds=120,
+                running_dir=self.test_dir
+            )
 
-        '''
-        runner = DockerRunner(
-            compilation_cmd,
-            timeout_seconds=120,
-            docker_dir=f"/submissions/{self.test_uuid}/",
-            host_dir=self.test_dir
-        )
-        '''
+        if self.verbose:
+            print("Compiling.")
 
-        result = runner.run()
+        result = runner.run(verbose=self.verbose)
 
         if result['time_limit_exceeded']:
             self.report["error_msgs"].append("Compilation timeout.")
@@ -60,34 +94,13 @@ class CppJudge(BaseJudge):
             (result['result'].stderr.strip() != '') or \
                 (result['result'].returncode != 0):
 
-            msg = result['result'].stdout
+            msg = result['result'].stdout.replace("\n", "<br>")
             msg += "<br>"
-            msg += result['result'].stderr
+            msg += result['result'].stderr.replace("\n", "<br>")
             msg += "<br>"
 
             self.report["error_msgs"].append(
-                f"Compilation error: <br> {msg}.")
-
-            return '', False
-
-        # run the program with docker and check for runtime errors
-        headers = self._get_files_with_patterns(CppJudge.HEADER_PTRN)
-        binaries = self._get_files_with_patterns(CppJudge.IGNORE_PTRN)
-        known_files = self.src_files + self.makefiles + headers + binaries
-
-        all_files = glob(f"{self.test_dir}/**/*", recursive=True)
-        executables = [f for f in all_files if f not in known_files]
-
-        if len(executables) == 0:
-            self.report["error_msgs"].append(
-                f"Compilation seems to have succeeded, but executable was not found.")
-            return '', False
-        elif len(executables) > 1:
-            self.report["error_msgs"].append(
-                f"More than one executable candidate was found: '{executables}'. Update the makefile to generate a single executable.")
-            return '', False
-
-        return executables[0], True
+                f"Compilation error: <br> {msg}")
 
     def _get_compilation_command(self):
         if len(self.makefiles) >= 0:
@@ -98,11 +111,12 @@ class CppJudge(BaseJudge):
                     makefile_found = True
                     break
 
-            # TODO: add an warning informating that makefiles were found,
-            # but none of them is in the project root.
-
             if makefile_found:
-                return "make"
+                return "make -s"
+            else:
+                # TODO: add an warning informating that makefiles were found,
+                # but none of them is in the project root.
+                pass
 
         cc = self.config['cpp']['cc']
         flags = self.config['cpp']['flags']
@@ -115,7 +129,7 @@ class CppJudge(BaseJudge):
         # assume the first directory is the one with smaller name
         # the following sort the files dirs by their size in descending order and return the first
         dirs = [str(Path(f).parent) for f in files]
-        return list(sorted(dirs, key=lambda x: len(x), reverse=True))[0]
+        return list(sorted(dirs, key=lambda x: len(x)))[0]
 
     def _clean_program_name(self, program_name, test_dir):
         # we remove the run directory because docker will add it later.

@@ -1,26 +1,35 @@
-
+import os
 import time
 import subprocess
 from typing import List, Optional
+from testr.autojudge.runner_interface import RunnerInterface
 
 
-class UnsafeRunner:
+class UnsafeRunner(RunnerInterface):
     # TODO: support cpu and memory limits.
     def __init__(self,
                  command: str,
                  timeout_seconds: Optional[float] = None,
+                 running_dir: Optional[str] = None
                  ):
 
         self._command = command
         self._timeout_seconds = timeout_seconds
+        self._running_dir = running_dir
 
-    def run(self, input_str: str = '', discard_outputs: List[str] = []):
+        if not self._running_dir:
+            self._running_dir = os.getcwd()
+
+    def run(self, input_str: str = '', discard_outputs: List[str] = [], verbose: bool = False):
         start = time.time()
         result = None
         time_limit_exceeded = False
 
-        print(f"Running command: {self._command}.")
-        print(f"Input: {input_str}.")
+        if verbose:
+            print("--------------------------")
+            print(f"Running command")
+            print(f"*** Command: {self._command}")
+            print(f"*** Input: {input_str}")
 
         try:
             # see https://docs.python.org/3/library/subprocess.html
@@ -30,6 +39,7 @@ class UnsafeRunner:
                 capture_output=True,
                 shell=True,
                 text=True,
+                cwd=self._running_dir,
                 timeout=self._timeout_seconds
             )
 
@@ -57,9 +67,11 @@ class UnsafeRunner:
             "running_time": (end - start)
         }
 
-        if time_limit_exceeded:
-            print("Timeout.")
-        else:
-            print("Result: ", result)
+        if verbose:
+            if time_limit_exceeded:
+                print("*** Timeout")
+            else:
+                print("*** Result: ", result)
+            print("--------------------------")
 
         return report

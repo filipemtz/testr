@@ -9,8 +9,10 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Tuple
 from datetime import datetime
 from pathlib import Path
-from testr.autojudge.unsafe_runner import UnsafeRunner
+from testr.autojudge.docker_runner import DockerRunner
 
+from testr.autojudge.unsafe_runner import UnsafeRunner
+from testr.autojudge.runner_interface import RunnerInterface
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import Submission
 from testr.utils.io import unzip
@@ -21,8 +23,13 @@ class BaseJudge(ABC):
         self.config = json.load(open("config.json"))
         self._keep_files = keep_files
 
-    def judge(self, submission: Submission) -> Dict[str, Any]:
+    def judge(self, submission: Submission, verbose: bool = False) -> Dict[str, Any]:
         self.test_uuid = str(uuid.uuid4())
+
+        self.verbose = verbose
+        if verbose:
+            print(f"New submission received - uuid: {self.test_uuid}.")
+
         self.submission = submission
         self.question = submission.question
 
@@ -37,13 +44,23 @@ class BaseJudge(ABC):
         run_cmd, success = self._evaluate_files_and_prepare_executable()
 
         if success:
-            runner = UnsafeRunner(run_cmd)
 
-            if self.config["use_docker"] == "True":
+            if self.config["use_docker"]:
+                runner = DockerRunner(
+                    run_cmd,
+                    cpu=self.question.cpu_limit,
+                    memory_mb=self.question.memory_limit,
+                    timeout_seconds=self.question.time_limit_seconds,
+                    # working dir is changed to self.test_dir internally
+                    host_dir=".",
+                    docker_dir=f'/submissions/{self.test_uuid}'
+                )
                 # docker requires using paths with "/" as separator
-                d = os.path.normpath(self.test_dir)
-                d = d.replace("\\", "/")
-                run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{self.test_uuid} -w /{self.test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
+                #d = os.path.normpath(self.test_dir)
+                #d = d.replace("\\", "/")
+                #run_cmd = f"docker run --memory={self.question.memory_limit}m --cpus={self.question.cpu_limit} -i --rm -v {d}:/{self.test_uuid} -w /{self.test_uuid} testr_docker_image timeout -s SIGKILL {self.question.time_limit_seconds}s {run_cmd}"
+            else:
+                runner = UnsafeRunner(run_cmd, running_dir=self.test_dir)
 
             self._run_input_output_tests(runner)
 
@@ -82,7 +99,7 @@ class BaseJudge(ABC):
             unzip(file_name_str, str(self.test_dir))
             os.remove(file_name_str)
 
-    def _run_input_output_tests(self, runner):
+    def _run_input_output_tests(self, runner: RunnerInterface):
         # get the question inputs and outputs from the db
         in_out_tests = EvaluationInputOutput.objects.filter(
             question=self.question)
@@ -92,7 +109,7 @@ class BaseJudge(ABC):
             "tests_reports": []
         }
 
-        for in_out_test in in_out_tests:
+        for counter, in_out_test in enumerate(in_out_tests):
             test_report = {
                 "input": in_out_test.input,
                 "expected_output": in_out_test.output,
@@ -114,14 +131,23 @@ class BaseJudge(ABC):
             )
             '''
 
-            # run report will be defined if time limit is not exceeded.
-            if run_report:
-                self._write_input_output_test_report(run_report, test_report)
+            if self.verbose:
+                print(f"Running test {counter} of {len(in_out_tests)}.")
+
+            run_report = runner.run(input_str, verbose=self.verbose)
+
+            if run_report['time_limit_exceeded']:
+                test_report['time_limit_exceeded'] = True
+                test_report['success'] = False
+            else:
+                self._write_input_output_test_report(
+                    run_report['result'], test_report)
 
             self.report["input_output_test_report"]["tests_reports"].append(
                 test_report)
 
         self._write_error_messages_from_tests()
+
     '''
     def _run_test(self,
                   run_cmd: str,
@@ -237,9 +263,6 @@ class BaseJudge(ABC):
         test_report["program_output"] = run_report.stdout
         test_report["program_errors"] = run_report.stderr
         test_report["return_code"] = run_report.returncode
-
-        test_report["program_errors"] = \
-            self._discard_known_errors(test_report["program_errors"])
 
         # Split without args does a great job cleaning the strings:
         # it removes: "\r", "\t", double spaces, spaces before new

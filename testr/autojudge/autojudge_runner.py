@@ -14,11 +14,11 @@ class AutoJudgeRunner:
     }
 
     @ classmethod
-    def evaluate(cls, submission: Submission, keep_files: bool) -> None:
+    def evaluate(cls, submission: Submission, keep_files: bool = False, verbose: bool = False) -> None:
         judge_class = AutoJudgeRunner.judges[submission.question.language]
 
         judge = judge_class(keep_files)
-        report = judge.judge(submission)
+        report = judge.judge(submission, verbose)
         report_json = json.dumps(report)
 
         submission.report_json = report_json
@@ -30,10 +30,16 @@ class AutoJudgeRunner:
 
         submission.save()
 
+        if verbose:
+            print("--------------------------")
+
         print(
             f"Submission {report['uuid']}: {submission} evaluated with {submission.status.label}.")
 
-        if len(report["error_msgs"]) > 0:
+        if verbose:
+            print("--------------------------")
+
+        if verbose and (len(report["error_msgs"]) > 0):
             print("Error messages:")
             print("--------------------------")
             for msg in report["error_msgs"]:

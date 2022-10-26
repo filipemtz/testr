@@ -11,6 +11,6 @@ RUN apt-get install -yq tzdata && \
 
 ENV TZ="America/Sao_Paulo"
 
-RUN apt install -y python3 python3-pip python3-venv python-is-python3 build-essential cmake vim tmux 
+RUN apt install -y python3 python3-pip python3-venv python-is-python3 build-essential cmake valgrind
 
 RUN python -m pip install numpy 

@@ -75,7 +75,7 @@ Use this strategy during development, but refer to [django documentation](https:
 
 ```
 sudo apt-get update
-sudo apt-get install \
+sudo apt-get -y install \
     ca-certificates \
     curl \
     gnupg \
