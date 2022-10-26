@@ -92,6 +92,7 @@ def enroll_course(request, course_id, enroll_password):
     return redirect('course-detail', pk=course.id)
 
 
+# TODO: refactor
 @login_required
 @require_http_methods(["POST"])
 def course_batch_enroll(request, course_id):

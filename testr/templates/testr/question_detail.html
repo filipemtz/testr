@@ -3,7 +3,12 @@
 {% block content %}
 
 <div>
-    <span class="h1"> {{ question.name }} </span>
+    <span class="h1">
+        {{ question.name }}
+        {% if solved %}
+        <i class="bi bi-balloon-fill text-success"></i>
+        {% endif %}
+    </span>
 
     {% if perms.testr.change_question %}
     <a href="{% url 'question-update' question.id %}"><i class="bi bi-pencil"></i></a>

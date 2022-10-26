@@ -97,13 +97,22 @@ class QuestionDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['question_html'] = self.object.description.replace(
-            "\n", "<BR>")
+
+        context['solved'] = Submission.solved_by_user(
+            self.object,
+            self.request.user
+        )
+
+        context['question_html'] = \
+            self.object.description.replace("\n", "<BR>")
+
         context['form'] = FileSubmissionForm()
+
         context['user_submissions'] = Submission.objects.filter(
             student=self.request.user,
             question=self.object
         )
+
         return context
 
 

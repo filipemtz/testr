@@ -30,6 +30,17 @@ class Submission(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    @classmethod
+    def solved_by_user(cls, question: Question, user: User) -> bool:
+        """ check if a user has solved a question """
+        succs = Submission.objects.filter(
+            student=user,
+            question=question,
+            status=SubmissionStatus.SUCCESS
+        )
+
+        return succs.count() > 0
+
     def status_label(self):
         return SubmissionStatus(self.status).label
 
