@@ -13,6 +13,7 @@ from testr.models import Section, Question, Submission
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import SubmissionStatus
 from testr.utils.group_validator import GroupValidator
+from testr.utils.widgets import FileSubmissionForm
 
 
 @login_required
@@ -62,14 +63,10 @@ class QuestionDelete(DeleteView):
         })
 
 
-class SubmissionForm(forms.Form):
-    file = forms.FileField(allow_empty_file=False)
-
-
 @require_http_methods(["POST"])
 def perform_question_submission(request, question_id):
     if request.method == 'POST':
-        form = SubmissionForm(request.POST, request.FILES)
+        form = FileSubmissionForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
 
@@ -100,7 +97,7 @@ class QuestionDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['form'] = SubmissionForm()
+        context['form'] = FileSubmissionForm()
         context['user_submissions'] = Submission.objects.filter(
             student=self.request.user,
             question=self.object

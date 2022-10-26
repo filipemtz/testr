@@ -11,7 +11,6 @@
         {{ form.as_ul }}
     </ul>
 
-
     <div class="form-widgets-area">
         <div class="d-flex justify-content-between">
             <div class="p-2">
@@ -33,10 +32,38 @@
 
         </div>
     </div>
-
 </form>
+
+<br>
+<hr>
+<br>
+<div>
+    <div class="h2">Import Studens</div>
+    <div>
+        Submit a csv file with the format "username;first name;last name;email;password".
+        A header row is expected in the file. If an user does not have a profile, a new one
+        will be created. Otherwise, the user with the given username will be enrolled in the course.
+    </div>
+    <br>
+    <div>
+        <form method='post' enctype="multipart/form-data" action="{% url 'course-batch-enroll' course.id %}">
+            <div><input type="file" name="file" id="file" /></div> <br>
+            <div><input class="btn btn-success" type="submit" name="file" id="file" value="Submit" /></div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <div class="h2"> Enrolled Students </div>
+    <div>
+        {% for e in enrollments %}
+        <div> {{ e.student.username }}: {{ e.student.first_name }} {{ e.student.last_name }} </div>
+        {% endfor %}
+    </div>
+</div>
 {% endif %}
 
+<br>
 <div class="form-widgets-area">
     <a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
 </div>

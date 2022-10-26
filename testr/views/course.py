@@ -1,13 +1,18 @@
 
+from django.views.decorators.http import require_http_methods
+from typing import Any, Dict
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django import forms
+from django.contrib.auth.models import User
 
 from testr.models import Course, Enrollment
 from testr.utils.group_validator import GroupValidator
+from testr.utils.widgets import FileSubmissionForm
 
 
 class CourseListView(LoginRequiredMixin, generic.ListView):
@@ -48,6 +53,14 @@ class CourseUpdate(UpdateView):
     model = Course
     fields = ['name']
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context['enrollments'] = Enrollment.objects.filter(
+            course=self.object)
+
+        return context
+
 
 class CourseDelete(DeleteView):
     model = Course
@@ -76,6 +89,55 @@ def enroll_course(request, course_id, enroll_password):
         enroll.save()
 
     return redirect('course-detail', pk=course.id)
+
+
+@login_required
+@require_http_methods(["POST"])
+def course_batch_enroll(request, course_id):
+    print("Entrou 1")
+    if GroupValidator.user_is_in_group(request.user, 'teacher'):
+        print("Entrou 2")
+        if request.method == 'POST':
+            print("Entrou 3")
+            form = FileSubmissionForm(request.POST, request.FILES)
+            if form.is_valid():
+                print("Entrou 4")
+                file = request.FILES['file']
+                if file.name.endswith('.csv'):
+                    lines = file.read().decode("utf-8")
+                    lines = lines.replace("\r", "").split("\n")
+                    print("lines 2:", lines)
+                    lines = [l.split(';') for l in lines[1:]]
+                    print("lines 3:", lines)
+                    # TODO: add validation for the file format.
+
+                    course = get_object_or_404(Course, id=course_id)
+                    for l in lines:
+                        print("l:", l)
+                        user = User.objects.filter(username=l[0])
+                        if user.count() == 0:
+                            user = User.objects.create_user(
+                                l[0],
+                                l[-2],
+                                l[-1]
+                            )
+                            user.first_name = l[1]
+                            user.last_name = l[2]
+                            user.save()
+                        else:
+                            user = user.first()
+
+                        # check if user is already enrolled in the course
+                        enroll = Enrollment.objects.filter(
+                            course=course,
+                            student=user
+                        )
+
+                        if (enroll is None) or (enroll.count() <= 0):
+                            enroll = Enrollment(course=course, student=user)
+                            enroll.save()
+
+    return redirect('course-update', pk=course_id)
 
 
 @login_required

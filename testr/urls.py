@@ -49,6 +49,8 @@ urlpatterns = [
          views.enroll_course, name="enroll-course"),
     path('course/<int:course_id>/unenroll/',
          views.unenroll_course, name='unenroll-course'),
+    path('course/<int:course_id>/batch-enroll/',
+         views.course_batch_enroll, name='course-batch-enroll'),
 
     # submission
     path('question/<int:question_id>/submission',
