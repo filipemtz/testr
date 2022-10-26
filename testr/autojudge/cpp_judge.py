@@ -33,6 +33,9 @@ class CppJudge(BaseJudge):
         first_dir = self._find_first_directory(self.src_files + self.makefiles)
         self.test_dir = first_dir
 
+        # for docker
+        self.test_dir = self.test_dir.replace("\\", '/')
+
         self._compile()
 
         # if any compilation error happened
@@ -43,13 +46,23 @@ class CppJudge(BaseJudge):
         headers = self._get_files_with_patterns(CppJudge.HEADER_PTRN)
         binaries = self._get_files_with_patterns(CppJudge.IGNORE_PTRN)
         known_files = self.src_files + self.makefiles + headers + binaries
-
         all_files = glob(f"{self.test_dir}/**/*", recursive=True)
+        # this filter has to be performed before making paths relative to self.test_dir
+        all_files = [f for f in all_files if not os.path.isdir(f)]
 
-        executables = list(filter(
-            lambda f: (not os.path.isdir(f)) and (f not in known_files),
-            all_files
-        ))
+        def fn(x): return self._clean_file_names(x, self.test_dir)
+        all_files = list(map(fn, all_files))
+        known_files = list(map(fn, known_files))
+
+        # print("all_files:", all_files)
+        # print("known_files:", known_files)
+
+        def fn2(f):
+            print("f:", f)
+            print("not os.path.isdir(f):", not os.path.isdir(f))
+            print("f not in known_files:", f not in known_files)
+            return (not os.path.isdir(f)) and (f not in known_files)
+        executables = list(filter(fn2, all_files))
 
         if len(executables) == 0:
             self.report["error_msgs"].append(
@@ -61,7 +74,7 @@ class CppJudge(BaseJudge):
                 f"More than one executable candidate was found: {candidates}.<BR>Update the makefile to generate a single executable.")
             return '', False
 
-        return executables[0], True
+        return "./" + executables[0], True
 
     def _compile(self):
         compilation_cmd = self._get_compilation_command()
@@ -120,8 +133,15 @@ class CppJudge(BaseJudge):
 
         cc = self.config['cpp']['cc']
         flags = self.config['cpp']['flags']
-        src = ' '.join(self.src_files)
+
+        src = map(
+            lambda f: self._clean_file_names(f, self.test_dir),
+            self.src_files
+        )
+        src = ' '.join(src)
+
         executable = os.path.join(self.test_dir, 'main')
+        executable = self._clean_file_names(executable, self.test_dir)
 
         return f"{cc} {src} {flags} -o {executable}"
 
@@ -131,7 +151,7 @@ class CppJudge(BaseJudge):
         dirs = [str(Path(f).parent) for f in files]
         return list(sorted(dirs, key=lambda x: len(x)))[0]
 
-    def _clean_program_name(self, program_name, test_dir):
+    def _clean_file_names(self, program_name, test_dir):
         # we remove the run directory because docker will add it later.
         # TODO: the replace in self.test_dir is already performed later in
         # base_judge.py:judge(). Improve this.

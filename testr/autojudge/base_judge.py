@@ -52,7 +52,7 @@ class BaseJudge(ABC):
                     memory_mb=self.question.memory_limit,
                     timeout_seconds=self.question.time_limit_seconds,
                     # working dir is changed to self.test_dir internally
-                    host_dir=".",
+                    host_dir=self.test_dir,
                     docker_dir=f'/submissions/{self.test_uuid}'
                 )
                 # docker requires using paths with "/" as separator

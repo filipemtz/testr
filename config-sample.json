@@ -9,12 +9,12 @@
     },
     "secret_key": "<SECRET KEY>",
     "autojudge_directory": "<DIRECTORY TO BE USED BY AUTOJUDGE>",
-    "use_docker": "True | False",
+    "use_docker": true | false,
     "allowed_hosts": [
         "<LIST OF ALLOWED HOSTS>"
     ],
     "cpp": {
-        "use_valgrind": "True | False (requires that valgrind is installed - NOT SUPPORTED YET.)",
+        "use_valgrind": true | false (requires that valgrind is installed - NOT SUPPORTED YET.),
         "flags": "flags to use when makefile is not submitted",
         "cc": "compiler to use when makefile is not submitted"
     }
