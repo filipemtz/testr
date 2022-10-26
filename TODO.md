@@ -2,11 +2,11 @@
 # Backlog
 
 - [ ] run evaluation of submissions in parallel
-- [ ] C/C++ judge
 - [ ] In autojudge, add CLI commands to allow re-evaluating a single question, course, student, and submission.
 - [ ] In autojudge, re-evaluate only the most recent submission of each student
 - [ ] As a student, view or download the submitted file.
 - [ ] Delete submissions? 
+- [ ] write a script to setup the test environment with some default users and questions
 - [ ] Use a better logging system to avoid the need of manually controlling verbosity.
 - [ ] Add types of errors when printing the result of tests in autojudge script.
 - [ ] teachers should be able of adding tests in questions to check if 
@@ -20,6 +20,7 @@
 - [ ] Drag and drop sections to change order.
 - [ ] limit memory and CPU using python subprocess when not using docker (see https://docs.python.org/3/library/resource.html))
 - [ ] Import and export questions from/to BOCA.
+- [ ] refactor the directory checks and processings in autojudge due to the use of docker
 - [ ] Import users from file (similar to BOCA).
 - [ ] Add checks for login, permissions, and groups in all views
 - [ ] refactor autojudge
@@ -29,7 +30,6 @@
 - [ ] Teachers - edit or submit new docker images to run programs.
 - [ ] Process input and output tests when submitted and not when running tests.
 - [ ] Write unit tests
-- [ ] check if "python" is found. If not, use "python3".
 
 # Known Bugs 
 
