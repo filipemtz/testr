@@ -150,8 +150,21 @@ from the db management system. In postgreSQL, for instance, one can dump the
 db with: 
 
 ```
-pg_dump -U <username> <db_name> > test.sql
+pg_dump -U <username> <db_name> > test.dump
 ```
+
+The dump file can be load with: 
+
+``` 
+psql <databasename> < data_base_dump
+``` 
+
+or:
+
+``` 
+sudo -u postgres psql <databasename> < data_base_dump
+``` 
+
 
 ## Information for Devs/Contributors
 

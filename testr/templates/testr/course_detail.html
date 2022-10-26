@@ -30,7 +30,7 @@
     {% for section in course.section_set.all %}
     {% if perms.testr.change_section or section.visible %}
     <div class="section">
-        <span class="h2 visible-{{section.visible}}">{{ forloop.counter }}. {{ section.name }}</span>
+        <span class="h2 visible-{{section.visible}}">{{ section.name }}</span>
 
         {% if perms.testr.change_section %}
         <a href="{% url 'section-toogle-visibility' section.id %}">
