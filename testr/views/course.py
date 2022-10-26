@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 from testr.models import Course, Enrollment
 from testr.utils.group_validator import GroupValidator
@@ -94,26 +95,21 @@ def enroll_course(request, course_id, enroll_password):
 @login_required
 @require_http_methods(["POST"])
 def course_batch_enroll(request, course_id):
-    print("Entrou 1")
     if GroupValidator.user_is_in_group(request.user, 'teacher'):
-        print("Entrou 2")
         if request.method == 'POST':
-            print("Entrou 3")
             form = FileSubmissionForm(request.POST, request.FILES)
             if form.is_valid():
-                print("Entrou 4")
                 file = request.FILES['file']
                 if file.name.endswith('.csv'):
                     lines = file.read().decode("utf-8")
                     lines = lines.replace("\r", "").split("\n")
-                    print("lines 2:", lines)
                     lines = [l.split(';') for l in lines[1:]]
-                    print("lines 3:", lines)
                     # TODO: add validation for the file format.
 
                     course = get_object_or_404(Course, id=course_id)
+                    student_group = Group.objects.get(name='student')
+
                     for l in lines:
-                        print("l:", l)
                         user = User.objects.filter(username=l[0])
                         if user.count() == 0:
                             user = User.objects.create_user(
@@ -126,6 +122,10 @@ def course_batch_enroll(request, course_id):
                             user.save()
                         else:
                             user = user.first()
+
+                        if student_group not in user.groups.all():
+                            user.groups.add(student_group)
+                            user.save()  # TODO: check if this is necessary.
 
                         # check if user is already enrolled in the course
                         enroll = Enrollment.objects.filter(

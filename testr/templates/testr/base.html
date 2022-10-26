@@ -120,7 +120,7 @@
         $(document).ready(function () {
             // if there is a form in the page, autofocus on the first element.
             if ($("form").length) {
-                $('form:first *:input[type!=hidden]:first').focus();
+                $('form:first *:input[type!=hidden && type!=input]:first').focus();
             }
         });
     </script>

@@ -47,6 +47,7 @@
 }
 
 .question-description {
+    text-align: justify;
     padding-bottom: 20px;
 }
 
