@@ -136,6 +136,23 @@ GRANT ALL PRIVILEGES ON DATABASE testr TO testr_user;
 
 Add the database connection information in config.json.
 
+## Dumping and loading a database
+
+It is possible to use django to dump the database with the following command: 
+
+```
+python manage.py dumpdata > db.json
+```
+
+However, when I tried to use this command in windows it saved the data with a 
+weird charset that I could not figure out. Therefore, I chose to use the tools
+from the db management system. In postgreSQL, for instance, one can dump the 
+db with: 
+
+```
+pg_dump -U <username> <db_name> > test.sql
+```
+
 ## Information for Devs/Contributors
 
 - Permissions are used in ```testr/template/*_list.html```, ```testr/template/*_form.html```, and ```testr/template/*_detail.html``` to control which buttons/links each group can view.
