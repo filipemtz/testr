@@ -13,7 +13,7 @@ from testr.utils.group_validator import GroupValidator
 
 
 class InputOutputForm(forms.Form):
-    input = forms.CharField(widget=forms.Textarea)
+    input = forms.CharField(widget=forms.Textarea, required=False)
     output = forms.CharField(widget=forms.Textarea)
 
 
