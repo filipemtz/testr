@@ -86,7 +86,9 @@
 
     {% for submission in user_submissions %}
     <div class="row  text-center submissions-rows">
-        <div class="col"> {{ submission.file_name }} </div>
+        <div class="col">
+            <a href="{% url 'submission-file' submission.id %}">{{ submission.file_name }}</a>
+        </div>
         <div class="col"> {{ submission.created_at }} </div>
         <div class='col submission-status-{{submission.status}}'>
             {{ submission.status_label }}

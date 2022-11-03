@@ -4,7 +4,8 @@ from typing import Any, Dict
 from django.views import generic
 from testr.models import Submission
 from testr.models.submission import SubmissionStatus
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 
 class SubmissionDetailView(generic.DetailView):
@@ -22,3 +23,18 @@ class SubmissionDetailView(generic.DetailView):
             context['error_msgs'] = report['error_msgs']
 
         return context
+
+
+def submission_get_file(request, pk):
+    submission = get_object_or_404(Submission, id=pk)
+    data = submission.file
+    name = submission.file_name
+
+    content_type = 'text/plain'
+    if '.zip' in name:
+        content_type = 'multipart/form-data'
+
+    response = HttpResponse(data, content_type=content_type)
+    response['Content-Disposition'] = f'attachment; filename={name}'
+
+    return response

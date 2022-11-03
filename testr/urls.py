@@ -31,7 +31,6 @@ urlpatterns = [
     path('section/<int:pk>/toogle_visibility/',
          views.section_toogle_visibility, name='section-toogle-visibility'),
 
-
     # question management
     path('section/<int:section_id>/question/create/',
          views.question_create, name="question-create"),
@@ -59,6 +58,8 @@ urlpatterns = [
          views.SubmissionDetailView.as_view(), name="submission-detail"),
     path('question/<int:pk>/rejudge',
          views.question_rejudge, name="question-rejudge"),
+    path('submission/<int:pk>/file',
+         views.submission_get_file, name="submission-file"),
 
     # input/output tests management
     path('question/<int:question_id>/in_out/create',
