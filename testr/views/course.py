@@ -92,52 +92,72 @@ def enroll_course(request, course_id, enroll_password):
     return redirect('course-detail', pk=course.id)
 
 
-# TODO: refactor
 @login_required
 @require_http_methods(["POST"])
 def course_batch_enroll(request, course_id):
-    if GroupValidator.user_is_in_group(request.user, 'teacher'):
-        if request.method == 'POST':
-            form = FileSubmissionForm(request.POST, request.FILES)
-            if form.is_valid():
-                file = request.FILES['file']
-                if file.name.endswith('.csv'):
-                    lines = file.read().decode("utf-8")
-                    lines = lines.replace("\r", "").split("\n")
-                    lines = [l.split(';') for l in lines[1:]]
-                    # TODO: add validation for the file format.
+    def submission_is_valid(request):
+        if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+            return False
 
-                    course = get_object_or_404(Course, id=course_id)
-                    student_group = Group.objects.get(name='student')
+        if request.method != 'POST':
+            return False
 
-                    for l in lines:
-                        user = User.objects.filter(username=l[0])
-                        if user.count() == 0:
-                            user = User.objects.create_user(
-                                l[0],
-                                l[-2],
-                                l[-1]
-                            )
-                            user.first_name = l[1]
-                            user.last_name = l[2]
-                            user.save()
-                        else:
-                            user = user.first()
+        form = FileSubmissionForm(request.POST, request.FILES)
+        if not form.is_valid():
+            return False
 
-                        if student_group not in user.groups.all():
-                            user.groups.add(student_group)
-                            user.save()  # TODO: check if this is necessary.
+        file = request.FILES['file']
+        if not file.name.endswith('.csv'):
+            return False
 
-                        # check if user is already enrolled in the course
-                        enroll = Enrollment.objects.filter(
-                            course=course,
-                            student=user
-                        )
+        return True
 
-                        if (enroll is None) or (enroll.count() <= 0):
-                            enroll = Enrollment(course=course, student=user)
-                            enroll.save()
+    def load_and_filer_data(request):
+        file = request.FILES['file']
+        lines = file.read().decode("utf-8")
+        lines = lines.replace("\r", "").split("\n")
+        lines = [l.split(';') for l in lines[1:]]
+        # TODO: add validation for the file format.
+        return lines
 
+    def load_or_create_user(l, student_group):
+        user = User.objects.filter(username=l[0])
+        if user.count() == 0:
+            user = User.objects.create_user(
+                l[0],
+                l[-2],
+                l[-1]
+            )
+            user.first_name = l[1]
+            user.last_name = l[2]
+            user.save()
+        else:
+            user = user.first()
+
+        if student_group not in user.groups.all():
+            user.groups.add(student_group)
+            user.save()  # TODO: check if this is necessary.
+
+        return user
+
+    def enroll_student_if_necessary(user, course):
+        # check if user is already enrolled in the course
+        enroll = Enrollment.objects.filter(
+            course=course,
+            student=user
+        )
+
+        if (enroll is None) or (enroll.count() <= 0):
+            enroll = Enrollment(course=course, student=user)
+            enroll.save()
+
+    if submission_is_valid(request):
+        lines = load_and_filer_data(request)
+        course = get_object_or_404(Course, id=course_id)
+        student_group = Group.objects.get(name='student')
+        for l in lines:
+            user = load_or_create_user(l, student_group)
+            enroll_student_if_necessary(user, course)
     return redirect('course-update', pk=course_id)
 
 
