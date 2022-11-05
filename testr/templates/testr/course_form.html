@@ -58,8 +58,24 @@
 <div>
     <div class="h2"> Enrolled Students </div>
     <div>
+        <div class="row">
+            <div class="col border text-center"><b>username</b></div>
+            <div class="col border text-center"><b>first name</b></div>
+            <div class="col border text-center"><b>last name</b></div>
+            <div class="col border text-center"><b>successes</b></div>
+            <div class="col border text-center"><b>attempted fails</b></div>
+            <div class="col border text-center"><b>not tried</b></div>
+        </div>
+
         {% for e in enrollments %}
-        <div> {{ e.student.username }}: {{ e.student.first_name }} {{ e.student.last_name }} </div>
+        <div class="row">
+            <div class="col border text-center">{{ e.student.username }}</div>
+            <div class="col border text-center">{{ e.student.first_name }}</div>
+            <div class="col border text-center">{{ e.student.last_name }}</div>
+            <div class="col border text-center text-success">{{ e.n_successes }}</div>
+            <div class="col border text-center text-danger">{{ e.n_attempted_fails }}</div>
+            <div class="col border text-center">{{ e.n_not_tried }}</div>
+        </div>
         {% endfor %}
     </div>
 </div>

@@ -2,6 +2,7 @@
 from django.db import models
 from django.urls import reverse
 from .question import Question
+from django.utils import timezone
 
 
 class EvaluationInputOutput(models.Model):
@@ -9,6 +10,10 @@ class EvaluationInputOutput(models.Model):
     input = models.TextField(blank=True)
     output = models.TextField(blank=True)
     visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.input} -> {self.output}"
