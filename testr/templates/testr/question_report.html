@@ -5,6 +5,11 @@
 <div class="h1">Question Report</div>
 
 {% if data %}
+<div>
+    <center>
+        <a href="{% url 'question-rejudge-all' question.id %}">Run Autojudge Again</a>
+    </center>
+</div>
 <br>
 <div class="row">
     <div class="col text-center border"><b>username</b></div>

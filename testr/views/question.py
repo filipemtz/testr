@@ -145,6 +145,12 @@ def question_rejudge(request, pk):
     return redirect('question-detail', pk=pk)
 
 
+def question_rejudge_all(request, pk):
+    question = get_object_or_404(Question, id=pk)
+    question.submission_set.update(status=SubmissionStatus.WAITING_EVALUATION)
+    return redirect('question-detail', pk=pk)
+
+
 @login_required
 def question_report(request, pk):
     if not GroupValidator.user_is_in_group(request.user, 'teacher'):
@@ -166,11 +172,16 @@ def question_report(request, pk):
                     submission_id = s.id
                     status = 'success'
                     cls = 'text-success'
-                elif status == 'not attempted':
+                elif (status == 'not attempted') and \
+                        (s.status == SubmissionStatus.WAITING_EVALUATION):
+                    submission_id = s.id
+                    status = 'waiting evaluation'
+                    cls = 'text-secondary'
+                elif (status == 'not attempted') and \
+                        (s.status == SubmissionStatus.FAIL):
                     submission_id = s.id
                     status = 'fail'
                     cls = 'text-danger'
-                break
 
         data.append({
             "student": e.student,

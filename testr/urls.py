@@ -60,6 +60,8 @@ urlpatterns = [
          views.SubmissionDetailView.as_view(), name="submission-detail"),
     path('question/<int:pk>/rejudge',
          views.question_rejudge, name="question-rejudge"),
+    path('question/<int:pk>/rejudge_all',
+         views.question_rejudge_all, name="question-rejudge-all"),
     path('submission/<int:pk>/file',
          views.submission_get_file, name="submission-file"),
 
