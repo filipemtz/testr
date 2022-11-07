@@ -1,0 +1,30 @@
+{% extends "testr/base.html" %}
+
+{% block content %}
+
+<div class="h1">Question Report</div>
+
+{% if data %}
+<br>
+<div class="row">
+    <div class="col text-center border"><b>username</b></div>
+    <div class="col text-center border"><b>first name</b></div>
+    <div class="col text-center border"><b>last name</b></div>
+    <div class="col text-center border"><b>status</b></div>
+</div>
+{% for d in data %}
+<div class="row">
+    <div class="col text-center border">{{ d.student.username }}</div>
+    <div class="col border">{{ d.student.first_name }}</div>
+    <div class="col border">{{ d.student.last_name }}</div>
+    <div class="col text-center border {{d.class}}">{{ d.status }}</div>
+</div>
+{% endfor %}
+{% endif %}
+
+<br>
+<div>
+    <a href="{% url 'question-detail' question.id %}">Back</a>
+</div>
+
+{% endblock %}

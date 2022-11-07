@@ -42,6 +42,8 @@ urlpatterns = [
          views.QuestionDetailView.as_view(), name="question-detail"),
     path('question/<int:pk>/toogle_visibility/',
          views.question_toogle_visibility, name="question-toogle-visibility"),
+    path('question/<int:pk>/report',
+         views.question_report, name="question-report"),
 
     # course enrollment
     path('course/<int:course_id>/enroll/<uuid:enroll_password>',

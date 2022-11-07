@@ -14,6 +14,10 @@
     <a href="{% url 'question-update' question.id %}"><i class="bi bi-pencil"></i></a>
     {% endif %}
 
+    {% if perms.testr.change_question %}
+    <a href="{% url 'question-report' question.id %}"><i class="bi bi-person-lines-fill"></i></a>
+    {% endif %}
+
     {% if perms.testr.delete_question %}
     <a href="{% url 'question-delete' question.id %}"><i class="bi bi-x-lg text-danger"></i></a>
     {% endif %}

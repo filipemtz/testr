@@ -12,6 +12,7 @@ from django import forms
 from testr.models import Section, Question, Submission
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import SubmissionStatus
+from testr.models.enrollment import Enrollment
 from testr.utils.group_validator import GroupValidator
 from testr.utils.widgets import FileSubmissionForm
 
@@ -142,3 +143,39 @@ def question_rejudge(request, pk):
         most_recent.status = SubmissionStatus.WAITING_EVALUATION
         most_recent.save()
     return redirect('question-detail', pk=pk)
+
+
+@login_required
+def question_report(request, pk):
+    if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+        return redirect('question-detail', pk=pk)
+
+    question = get_object_or_404(Question, id=pk)
+    enrolled = Enrollment.objects.filter(course=question.section.course)
+    submissions = Submission.objects.filter(question=question)
+
+    data = []
+    for e in enrolled.all():
+        cls = ''
+        status = 'not attempted'
+
+        for s in submissions.all():
+            if s.student == e.student:
+                if s.status == SubmissionStatus.SUCCESS:
+                    status = 'success'
+                    cls = 'text-success'
+                elif status == 'not attempted':
+                    status = 'fail'
+                    cls = 'text-danger'
+                break
+
+        data.append({
+            "student": e.student,
+            "status": status,
+            "class": cls
+        })
+
+    return render(request, 'testr/question_report.html', {
+        'data': data,
+        'question': question
+    })
