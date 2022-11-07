@@ -136,7 +136,7 @@ def question_toogle_visibility(request, pk):
 
 def question_rejudge(request, pk):
     question = get_object_or_404(Question, id=pk)
-    submissions = question.submission_set.all()
+    submissions = question.submission_set.filter(student=request.user).all()
     if submissions.count() >= 0:
         most_recent = submissions.first()
         most_recent.status = SubmissionStatus.WAITING_EVALUATION
