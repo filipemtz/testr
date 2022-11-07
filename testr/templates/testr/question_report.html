@@ -17,7 +17,15 @@
     <div class="col text-center border">{{ d.student.username }}</div>
     <div class="col border">{{ d.student.first_name }}</div>
     <div class="col border">{{ d.student.last_name }}</div>
-    <div class="col text-center border {{d.class}}">{{ d.status }}</div>
+    <div class="col text-center border">
+        {% if d.submission_id %}
+        <a href="{% url 'submission-detail' d.submission_id %}" class='{{d.class}}'>
+            {{ d.status }}
+        </a>
+        {% else %}
+        {{ d.status }}
+        {% endif %}
+    </div>
 </div>
 {% endfor %}
 {% endif %}

@@ -8,7 +8,9 @@
     <div>
         <div class="h2"> General Information </div>
         <div> <b> User: </b> {{ submission.student.username }} </div>
-        <div> <b> File: </b> {{ submission.file_name }} </div>
+        <div> <b> File: </b>
+            <a href="{% url 'submission-file' submission.id %}">{{ submission.file_name }}</a>
+        </div>
         <div> <b> Created At: </b> {{ submission.created_at }} </div>
         <div> <b> Submission UUID: </b> {{ submission_uuid }} </div>
         <div>

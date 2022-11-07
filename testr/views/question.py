@@ -158,13 +158,16 @@ def question_report(request, pk):
     for e in enrolled.all():
         cls = ''
         status = 'not attempted'
+        submission_id = None
 
         for s in submissions.all():
             if s.student == e.student:
                 if s.status == SubmissionStatus.SUCCESS:
+                    submission_id = s.id
                     status = 'success'
                     cls = 'text-success'
                 elif status == 'not attempted':
+                    submission_id = s.id
                     status = 'fail'
                     cls = 'text-danger'
                 break
@@ -172,7 +175,8 @@ def question_report(request, pk):
         data.append({
             "student": e.student,
             "status": status,
-            "class": cls
+            "class": cls,
+            "submission_id": submission_id
         })
 
     return render(request, 'testr/question_report.html', {
