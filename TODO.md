@@ -1,6 +1,7 @@
 
 # Backlog
 
+- [ ] apply strip on all lines submitted as input for the program.
 - [ ] run evaluation of submissions in parallel
 - [ ] In autojudge, add CLI commands to allow re-evaluating a single question, course, student, and submission.
 - [ ] In autojudge, re-evaluate only the most recent submission of each student

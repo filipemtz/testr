@@ -119,17 +119,11 @@ class BaseJudge(ABC):
             }
 
             # clean the input string
+            # 1) remove "\r"
             input_str = in_out_test.input.strip().replace("\r", "")
-
-            '''
-            # run the test
-            run_report = self._run_test(
-                run_cmd,
-                input_str,
-                self.question.time_limit_seconds,
-                test_report
-            )
-            '''
+            # 2) remove spaces in the beginning and end of lines
+            input_str = "\n".join([line.strip()
+                                  for line in input_str.split("\n")])
 
             if self.verbose:
                 print(f"Running test {counter} of {len(in_out_tests)}.")
@@ -210,6 +204,8 @@ class BaseJudge(ABC):
             if test["success"]:
                 if test["visible"]:
                     visible_test_id += 1
+                else:
+                    n_hidden_tests += 1
                 continue
 
             if test["visible"]:

@@ -13,8 +13,13 @@ class AutoJudgeRunner:
         Language.PYTHON.value: PythonJudge,
     }
 
-    @ classmethod
-    def evaluate(cls, submission: Submission, keep_files: bool = False, verbose: bool = False) -> None:
+    @classmethod
+    def evaluate(cls,
+                 submission: Submission,
+                 keep_files: bool = False,
+                 verbose: bool = False
+                 ) -> None:
+
         judge_class = AutoJudgeRunner.judges[submission.question.language]
 
         judge = judge_class(keep_files)
@@ -46,6 +51,6 @@ class AutoJudgeRunner:
                 print("* ", msg)
             print("--------------------------")
 
-    @ classmethod
+    @classmethod
     def register_judge(cls, language: str, judge_class: BaseJudge) -> None:
         AutoJudgeRunner.judges[language] = judge_class
