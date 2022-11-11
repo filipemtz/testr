@@ -19,6 +19,9 @@ class SubmissionDetailView(generic.DetailView):
 
         if self.object.status != SubmissionStatus.WAITING_EVALUATION:
             report = json.loads(self.object.report_json)
+            report['error_msgs'] = [
+                e.replace("\n", "<br>") for e in report['error_msgs']]
+            
             context['submission_uuid'] = report['uuid']
             context['error_msgs'] = report['error_msgs']
 
