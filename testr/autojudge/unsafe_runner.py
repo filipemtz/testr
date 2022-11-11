@@ -58,6 +58,8 @@ class UnsafeRunner(RunnerInterface):
 
         except subprocess.TimeoutExpired:
             time_limit_exceeded = True
+        except Exception:
+            time_limit_exceeded = True
 
         end = time.time()
 
