@@ -147,7 +147,7 @@ class BaseJudge(ABC):
 
     def _save_question_files(self, question: Question):
         for question_file in question.questionfile_set.all():
-            file_name = self.test_dir.joinpath(question_file.file_name)
+            file_name = os.path.join(self.test_dir, question_file.file_name)
             with open(file_name, "wb") as f:
                 f.write(question_file.file)
 
