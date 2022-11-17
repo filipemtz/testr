@@ -15,6 +15,8 @@ from testr.autojudge.unsafe_runner import UnsafeRunner
 from testr.autojudge.runner_interface import RunnerInterface
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import Submission
+from testr.models.question import Question
+from testr.models.question_file import QuestionFile
 from testr.utils.io import unzip
 
 
@@ -42,6 +44,7 @@ class BaseJudge(ABC):
 
         self._prepare_directory_and_files_for_test(self.test_uuid, submission)
         run_cmd, success = self._evaluate_files_and_prepare_executable()
+        self._save_question_files(self.question)
 
         if success:
 
@@ -141,6 +144,12 @@ class BaseJudge(ABC):
                 test_report)
 
         self._write_error_messages_from_tests()
+
+    def _save_question_files(self, question: Question):
+        for question_file in question.questionfile_set.all():
+            file_name = self.test_dir.joinpath(question_file.file_name)
+            with open(file_name, "wb") as f:
+                f.write(question_file.file)
 
     '''
     def _run_test(self,
