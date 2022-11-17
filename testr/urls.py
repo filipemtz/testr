@@ -44,6 +44,10 @@ urlpatterns = [
          views.question_toogle_visibility, name="question-toogle-visibility"),
     path('question/<int:pk>/report',
          views.question_report, name="question-report"),
+    path('question/<int:pk>/add_file',
+         views.question_add_file, name="add-file-to-question"),
+    path('question/<int:pk>/get_file/<int:file_id>',
+         views.question_get_file, name="get-question-file"),
 
     # course enrollment
     path('course/<int:course_id>/enroll/<uuid:enroll_password>',

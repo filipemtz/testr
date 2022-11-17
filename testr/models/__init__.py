@@ -8,3 +8,4 @@ from .evaluation_input_output import EvaluationInputOutput
 from .evaluation_script import EvaluationScript
 from .submission import Submission
 from .enrollment import Enrollment
+from .question_file import QuestionFile

@@ -34,6 +34,46 @@
 </form>
 {% endif %}
 
+{% if perms.testr.change_question %}
+{% if question %}
+<br>
+<div>
+    <div class="h2 text-center"> Add Files to Question </div>
+    <div class="text-center">
+        Files can be used to clarify the specification or in tests.
+        They will be added to user's directories during tests.
+    </div>
+
+    <br>
+    {% for file in question.questionfile_set.all %}
+    <div>
+        <div><a href="{% url 'get-question-file' question.id file.id %}">{{ file.file_name }}</a></div>
+    </div>
+    {% empty %}
+    <div>No files yet.</div>
+    {% endfor %}
+    <br>
+
+    <form action="{% url 'add-file-to-question' question.id  %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul>
+            {{ file_upload_form.as_ul }}
+        </ul>
+
+        <div class="form-widgets-area">
+            <div class="d-flex justify-content-between">
+                <div class="p-2">
+                    <input class='btn btn-success' type="submit" value="Save" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endif %}
+{% endif %}
+
+
 <div class="in_out_tests">
     <div class="h2 text-center"> Input/Output Tests </div>
     <div class="text-center"> Left column is the input and right column is the output </div>

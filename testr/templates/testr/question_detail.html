@@ -31,6 +31,15 @@
     <div> <b> Question: </b> </div>
     <br>
     <div> {{ question_html | safe }} </div>
+
+    {% if question.questionfile_set.all %}
+    <br>
+    {% for file in question.questionfile_set.all %}
+    <div>
+        <div><a href="{% url 'get-question-file' question.id file.id %}">{{ file.file_name }}</a></div>
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 
 <br>

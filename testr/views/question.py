@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django import forms
 
@@ -13,6 +14,7 @@ from testr.models import Section, Question, Submission
 from testr.models.evaluation_input_output import EvaluationInputOutput
 from testr.models.submission import SubmissionStatus
 from testr.models.enrollment import Enrollment
+from testr.models.question_file import QuestionFile
 from testr.utils.group_validator import GroupValidator
 from testr.utils.widgets import FileSubmissionForm
 
@@ -48,6 +50,11 @@ class QuestionUpdate(UpdateView):
         "memory_limit",
         "cpu_limit"
     ]
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['file_upload_form'] = FileSubmissionForm()
+        return context
 
     def get_success_url(self):
         return reverse_lazy('question-update', kwargs={
@@ -149,6 +156,56 @@ def question_rejudge_all(request, pk):
     question = get_object_or_404(Question, id=pk)
     question.submission_set.update(status=SubmissionStatus.WAITING_EVALUATION)
     return redirect('question-detail', pk=pk)
+
+
+@login_required
+def question_add_file(request, pk):
+    if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+        return redirect('question-update', pk=pk)
+
+    question = get_object_or_404(Question, id=pk)
+
+    if request.method == 'POST':
+        form = FileSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            # IMPORTANT: read loads the entire file in memory. A better
+            # approach would be to use f.chunks(), but then how to save
+            # the file into the db?
+            new_file = QuestionFile(
+                question=question,
+                file=file.read(),
+                file_name=file.name,
+            )
+            new_file.save()
+            return redirect('question-update', pk=pk)
+
+    return render(request, 'testr/error_page.html', {
+        'error_msg': "You should not get here this way."
+    })
+
+
+@login_required
+def question_get_file(request, pk, file_id):
+    file = get_object_or_404(QuestionFile, id=file_id)
+    question = get_object_or_404(Question, id=pk)
+
+    if file.question != question:
+        return render(request, 'testr/error_page.html', {
+            'error_msg': "File does not belong to question."
+        })
+
+    data = file.file
+    name = file.file_name
+
+    content_type = 'text/plain'
+    if '.zip' in name:
+        content_type = 'multipart/form-data'
+
+    response = HttpResponse(data, content_type=content_type)
+    response['Content-Disposition'] = f'attachment; filename={name}'
+
+    return response
 
 
 @login_required
