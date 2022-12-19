@@ -1,7 +1,17 @@
 
+# TO ADD
+
+- [ ] show progress in relation to others as a gamification strategy
+- [ ] allow easily running the services locally 
+- [ ] export and import questions, classes, users, etc.
+- [ ] make questions independent self-contained packages so that they are not dependent of the system. Users should be able of downloading questions, uploading in other virtual learning envs and, running autojudge independently in the context of the question. Why: if the system is discontinued, users should not lose the questions because preparing them is highly time-consuming.
+- [ ] non-binary grades based on the number of tests passed. Allow setting weights to the tests.
+- [ ] grades based on code quality or implementation of requirements (classes, functions, structs, etc.)
+- [ ] model *types of problems* so that we can provide a system for users easily creating questions of these types.
+
 # Backlog
 
-- [ ] apply strip on all lines submitted as input for the program.
+- [ ] apply strip on all lines used as input in tests.
 - [ ] run evaluation of submissions in parallel
 - [ ] In autojudge, add CLI commands to allow re-evaluating a single question, course, student, and submission.
 - [ ] In autojudge, re-evaluate only the most recent submission of each student
