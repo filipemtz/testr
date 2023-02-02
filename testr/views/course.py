@@ -97,17 +97,21 @@ def enroll_course(request, course_id, enroll_password):
 def course_batch_enroll(request, course_id):
     def submission_is_valid(request):
         if not GroupValidator.user_is_in_group(request.user, 'teacher'):
+            print("user group is invalid")
             return False
 
         if request.method != 'POST':
+            print("request is not post.")
             return False
 
         form = FileSubmissionForm(request.POST, request.FILES)
         if not form.is_valid():
+            print("file is not valid.")
             return False
 
         file = request.FILES['file']
         if not file.name.endswith('.csv'):
+            print("file is not csv.")
             return False
 
         return True
