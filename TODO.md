@@ -1,6 +1,8 @@
 
-# TO ADD
+# Backlog
 
+- [ ] as teacher, define start and end dates for submissions so that we can do tests with limited time.
+- [ ] allow removing files from questions
 - [ ] show progress in relation to others as a gamification strategy
 - [ ] allow easily running the services locally 
 - [ ] export and import questions, classes, users, etc.
@@ -8,9 +10,6 @@
 - [ ] non-binary grades based on the number of tests passed. Allow setting weights to the tests.
 - [ ] grades based on code quality or implementation of requirements (classes, functions, structs, etc.)
 - [ ] model *types of problems* so that we can provide a system for users easily creating questions of these types.
-
-# Backlog
-
 - [ ] apply strip on all lines used as input in tests.
 - [ ] run evaluation of submissions in parallel
 - [ ] In autojudge, add CLI commands to allow re-evaluating a single question, course, student, and submission.
