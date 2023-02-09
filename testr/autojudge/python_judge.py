@@ -31,8 +31,8 @@ class PythonJudge(BaseJudge):
             # search for the one with __main__.
             runnable_files = []
             for f in files:
-                with open(f, "r") as f:
-                    file_content = f.read()
+                with open(f, "r") as file_reader:
+                    file_content = file_reader.read()
 
                 if "__main__" in file_content:
                     runnable_files.append(f)
