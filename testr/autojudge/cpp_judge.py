@@ -58,9 +58,9 @@ class CppJudge(BaseJudge):
         # print("known_files:", known_files)
 
         def fn2(f):
-            print("f:", f)
-            print("not os.path.isdir(f):", not os.path.isdir(f))
-            print("f not in known_files:", f not in known_files)
+            # print("f:", f)
+            # print("not os.path.isdir(f):", not os.path.isdir(f))
+            # print("f not in known_files:", f not in known_files)
             return (not os.path.isdir(f)) and (f not in known_files)
         executables = list(filter(fn2, all_files))
 
@@ -143,7 +143,7 @@ class CppJudge(BaseJudge):
         executable = os.path.join(self.test_dir, 'main')
         executable = self._clean_file_names(executable, self.test_dir)
 
-        return f"{cc} {src} {flags} -o {executable}"
+        return f"{cc} {flags} -o {executable} {src}"
 
     def _find_first_directory(self, files):
         # assume the first directory is the one with smaller name

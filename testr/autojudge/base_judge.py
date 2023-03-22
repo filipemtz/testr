@@ -43,8 +43,8 @@ class BaseJudge(ABC):
                        "start_at": dt, "uuid": self.test_uuid}
 
         self._prepare_directory_and_files_for_test(self.test_uuid, submission)
-        run_cmd, success = self._evaluate_files_and_prepare_executable()
         self._save_question_files(self.question)
+        run_cmd, success = self._evaluate_files_and_prepare_executable()
 
         if success:
 
