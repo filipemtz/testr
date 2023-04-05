@@ -48,7 +48,8 @@ class QuestionUpdate(UpdateView):
         'language',
         'time_limit_seconds',
         "memory_limit",
-        "cpu_limit"
+        "cpu_limit",
+        "submission_deadline",
     ]
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

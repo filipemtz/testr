@@ -28,12 +28,18 @@ class Question(models.Model):
     cpu_limit = models.FloatField(default=0.25)
     created_at = models.DateTimeField(default=timezone.now)
     visible = models.BooleanField(default=True)
+    submission_deadline = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['created_at']
 
     def __str__(self):
         return self.name
+
+    def submission_is_open(self):
+        if timezone.now() < self.submission_deadline:
+            return True
+        return False
 
     def language_label(self):
         return Language(self.language).label

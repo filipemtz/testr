@@ -67,6 +67,12 @@
 
 <hr>
 
+{% if not question.submission_is_open %}
+Submission deadline is over.
+<br> <br>
+{% endif %}
+
+{% if question.submission_is_open %}
 <form action="{% url 'question-submission' question.id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <ul>
@@ -80,8 +86,8 @@
             </div>
         </div>
     </div>
-
 </form>
+{% endif %}
 
 {% if user_submissions %}
 <div class="h2 text-center"> Submissions </div>
