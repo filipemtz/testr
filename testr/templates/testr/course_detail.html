@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% if perms.testr.change_course or course.visible %}
+
 <div class="text-center">
     <span class="h1">{{ course.name }} </span>
     {% if perms.testr.change_course %}
@@ -104,5 +106,11 @@
 <div>
     <a href="{% url 'courses' %}">Back</a>
 </div>
+
+{% else %}
+
+Curso não encontrado.
+
+{% endif %}
 
 {% endblock %}

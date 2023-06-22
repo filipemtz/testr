@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% if submission.student.id == user.id %}
+
 <div class="h1"> {{ submission.question.name }} </div>
 
 <div class="submission-detail-content">
@@ -36,5 +38,10 @@
     <div><a href="{% url 'question-detail' submission.question.id %}">Back</a></div>
 </div>
 
+{% else %}
+
+Submission not found.
+
+{% endif %}
 
 {% endblock %}

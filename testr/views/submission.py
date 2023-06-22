@@ -21,7 +21,7 @@ class SubmissionDetailView(generic.DetailView):
             report = json.loads(self.object.report_json)
             report['error_msgs'] = [
                 e.replace("\n", "<br>") for e in report['error_msgs']]
-            
+
             context['submission_uuid'] = report['uuid']
             context['error_msgs'] = report['error_msgs']
 
@@ -32,6 +32,9 @@ def submission_get_file(request, pk):
     submission = get_object_or_404(Submission, id=pk)
     data = submission.file
     name = submission.file_name
+
+    if submission.student != request.user:
+        return HttpResponse('Unauthorized', status=401)
 
     content_type = 'text/plain'
     if '.zip' in name:

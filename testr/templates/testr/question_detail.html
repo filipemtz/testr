@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% if perms.testr.change_question or question.visible %}
+
 <div>
     <span class="h1">
         {{ question.name }}
@@ -130,5 +132,11 @@ Submission deadline is over.
 <br>
 
 <div><a href="{% url 'course-detail' question.section.course.id %}">Back</a></div>
+
+{% else %}
+
+Question not found.
+
+{% endif %}
 
 {% endblock %}

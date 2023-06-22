@@ -1,5 +1,5 @@
 
-
+import random
 import uuid
 from time import sleep
 from django.core.management.base import BaseCommand
@@ -44,13 +44,16 @@ class Command(BaseCommand):
             submissions = Submission.objects.filter(
                 status=SubmissionStatus.WAITING_EVALUATION)
 
-            if submissions.count() == 0:
+            if len(submissions) == 0:
                 # print(
                 #    f"No submissions without evaluation were found. Sleeping for {options['sleep_time']} seconds.")
                 sleep(options['sleep_time'])
             else:
-                # last is selected because by default submissions are ordered by
-                # submission time, with the most recent first.
                 selected_submission = submissions.first()
+
+                if options['verbose']:
+                    print("EVALUATING SUBMISSION:", selected_submission.id, "STUDENT:",
+                          selected_submission.student, "QUESTION:", selected_submission.question)
+
                 AutoJudgeRunner.evaluate(
                     selected_submission, options['keep'], options['verbose'])

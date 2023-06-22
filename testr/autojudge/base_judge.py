@@ -9,8 +9,9 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Tuple
 from datetime import datetime
 from pathlib import Path
-from testr.autojudge.docker_runner import DockerRunner
+import platform
 
+from testr.autojudge.docker_runner import DockerRunner
 from testr.autojudge.unsafe_runner import UnsafeRunner
 from testr.autojudge.runner_interface import RunnerInterface
 from testr.models.evaluation_input_output import EvaluationInputOutput
@@ -45,6 +46,10 @@ class BaseJudge(ABC):
         self._prepare_directory_and_files_for_test(self.test_uuid, submission)
         self._save_question_files(self.question)
         run_cmd, success = self._evaluate_files_and_prepare_executable()
+
+        print("platform.system():", platform.system())
+        if platform.system() == "Windows":
+            run_cmd = run_cmd.replace("./", ".\\")
 
         if success:
 
