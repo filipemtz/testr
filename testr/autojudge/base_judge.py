@@ -151,8 +151,10 @@ class BaseJudge(ABC):
         self._write_error_messages_from_tests()
 
     def _save_question_files(self, question: Question):
+        self.known_question_files = []
         for question_file in question.questionfile_set.all():
             file_name = os.path.join(self.test_dir, question_file.file_name)
+            self.known_question_files.append(file_name)
             with open(file_name, "wb") as f:
                 f.write(question_file.file)
 

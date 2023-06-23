@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% if submission.student.id == user.id %}
+{% if submission.student.id == user.id or perms.testr.change_submission %}
 
 <div class="h1"> {{ submission.question.name }} </div>
 

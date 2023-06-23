@@ -45,7 +45,8 @@ class CppJudge(BaseJudge):
         # run the program with docker and check for runtime errors
         headers = self._get_files_with_patterns(CppJudge.HEADER_PTRN)
         binaries = self._get_files_with_patterns(CppJudge.IGNORE_PTRN)
-        known_files = self.src_files + self.makefiles + headers + binaries
+        known_files = self.src_files + self.makefiles + \
+            headers + binaries + self.known_question_files
         all_files = glob(f"{self.test_dir}/**/*", recursive=True)
         # this filter has to be performed before making paths relative to self.test_dir
         all_files = [f for f in all_files if not os.path.isdir(f)]
