@@ -62,6 +62,8 @@ urlpatterns = [
          views.perform_question_submission, name="question-submission"),
     path('submission/<int:pk>/',
          views.SubmissionDetailView.as_view(), name="submission-detail"),
+    path('submission/<int:pk>/delete',
+         views.SubmissionDelete.as_view(), name="submission-delete"),
     path('question/<int:pk>/rejudge',
          views.question_rejudge, name="question-rejudge"),
     path('question/<int:pk>/rejudge_all',

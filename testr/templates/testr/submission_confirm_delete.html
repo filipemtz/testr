@@ -1,0 +1,20 @@
+{% extends "testr/base.html" %}
+
+{% block content %}
+
+<h1>Delete Submission</h1>
+
+<div>Are you sure you want to delete the submission "{{ submission.id }}"?</div>
+
+<div class="text-danger">The source code will be lost! This is an irreversible action!</div>
+
+<br>
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Yes, delete." />
+</form>
+
+<br>
+<a href="{{ request.META.HTTP_REFERER | escape }}">Back</a>
+
+{% endblock %}

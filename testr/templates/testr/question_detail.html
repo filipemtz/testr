@@ -103,6 +103,7 @@ Submission deadline is over.
         <div class="col"> Created At </div>
         <div class="col"> Status </div>
         <div class="col"> Report </div>
+        <div class="col"> Options </div>
     </div>
 
     {% for submission in user_submissions %}
@@ -116,6 +117,9 @@ Submission deadline is over.
         </div>
         <div class="col">
             <a href="{% url 'submission-detail' submission.id %}"> View </a>
+        </div>
+        <div class="col">
+            <a href="{% url 'submission-delete' submission.id %}"><i class="bi bi-x-lg text-danger"></i></a>
         </div>
     </div>
     {% endfor %}

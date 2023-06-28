@@ -1,5 +1,7 @@
 
 import json
+from datetime import datetime
+
 from testr.autojudge.cpp_judge import CppJudge
 from testr.models.question import Language
 from testr.models.submission import Submission, SubmissionStatus
@@ -23,9 +25,22 @@ class AutoJudgeRunner:
         judge_class = AutoJudgeRunner.judges[submission.question.language]
 
         judge = judge_class(keep_files)
-        report = judge.judge(submission, verbose)
-        report_json = json.dumps(report)
+        try:
+            report = judge.judge(submission, verbose)
+        except Exception as e:
+            date_format = "%d/%m/%Y %H:%M:%S"
+            dt = datetime.now().strftime(date_format)
+            report = {
+                "error_msgs": ["The submission crashed the autojudge."],
+                "start_at": dt,
+                "end_at": dt,
+                "uuid": "",
+                "input_output_test_report": {
+                    "tests_reports": []
+                }
+            }
 
+        report_json = json.dumps(report)
         submission.report_json = report_json
 
         if len(report["error_msgs"]) == 0:

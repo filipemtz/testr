@@ -4,8 +4,11 @@ from typing import Any, Dict
 from django.views import generic
 from testr.models import Submission
 from testr.models.submission import SubmissionStatus
+from testr.utils.group_validator import GroupValidator
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
 
 
 class SubmissionDetailView(generic.DetailView):
@@ -28,12 +31,21 @@ class SubmissionDetailView(generic.DetailView):
         return context
 
 
+class SubmissionDelete(DeleteView):
+    model = Submission
+
+    def get_success_url(self):
+        return reverse_lazy('question-detail', kwargs={
+            "pk": self.object.question.id
+        })
+
+
 def submission_get_file(request, pk):
     submission = get_object_or_404(Submission, id=pk)
     data = submission.file
     name = submission.file_name
 
-    if submission.student != request.user:
+    if (submission.student != request.user) and (not GroupValidator.user_is_in_group(request.user, 'teacher')):
         return HttpResponse('Unauthorized', status=401)
 
     content_type = 'text/plain'
