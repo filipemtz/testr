@@ -6,6 +6,7 @@ fonttools
 kiwisolver
 matplotlib
 numpy
+openpyxl
 packaging
 pandas
 Pillow
@@ -19,4 +20,5 @@ six
 sqlparse
 tenacity
 toml
+tqdm
 tzdata
