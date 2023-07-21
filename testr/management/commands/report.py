@@ -51,13 +51,16 @@ class ReportExporter:
                 course=course).order_by('enrolled_at')
 
             sheet.cell(row=1, column=1, value='Id')
-            sheet.cell(row=1, column=2, value='Name')
+            sheet.cell(row=1, column=2, value='Username')
+            sheet.cell(row=1, column=3, value='Name')
             student_rows = {}
             for idx, enroll in enumerate(enrolls):
                 name = f"{enroll.student.first_name} {enroll.student.last_name}"
                 student_row = idx + 2
                 sheet.cell(row=student_row, column=1, value=enroll.student.id)
-                sheet.cell(row=student_row, column=2, value=name)
+                sheet.cell(row=student_row, column=2,
+                           value=enroll.student.username)
+                sheet.cell(row=student_row, column=3, value=name)
                 student_rows[enroll.student.id] = student_row
 
             # create dir for each question and name the colums with the question names
@@ -68,7 +71,7 @@ class ReportExporter:
                 question_dir = f"{course_dir}/{question_dir}"
                 os.mkdir(question_dir)
 
-                question_col = question_idx + 3
+                question_col = question_idx + 4
                 sheet.cell(row=1, column=question_col, value=question_name)
 
                 # save most recent submission for each student in each question
@@ -89,7 +92,9 @@ class ReportExporter:
                             student_row = len(student_rows) + 2
                             sheet.cell(row=student_row, column=1,
                                        value=student.id)
-                            sheet.cell(row=student_row, column=2, value=name)
+                            sheet.cell(row=student_row, column=2,
+                                       value=student.username)
+                            sheet.cell(row=student_row, column=3, value=name)
                             student_rows[student.id] = student_row
                             # print(
                             #    f"Warning: student '{name}' is not enrolled in course '{course.name}', but has submitted a solution for question '{question.name}'.")
