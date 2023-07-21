@@ -16,6 +16,7 @@
     <div class="col text-center border"><b>first name</b></div>
     <div class="col text-center border"><b>last name</b></div>
     <div class="col text-center border"><b>status</b></div>
+    <div class="col text-center border"><b>Download</b></div>
 </div>
 {% for d in data %}
 <div class="row">
@@ -31,6 +32,7 @@
         {{ d.status }}
         {% endif %}
     </div>
+    <div class="col border"><a href="{% url 'submission-file' d.submission_id %}">{{ submission.file_name }}</a></div>
 </div>
 {% endfor %}
 {% endif %}

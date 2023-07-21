@@ -5,6 +5,7 @@ from time import sleep
 from django.core.management.base import BaseCommand
 from testr.autojudge.autojudge_runner import AutoJudgeRunner
 from testr.models.submission import Submission, SubmissionStatus
+from multiprocessing import Pool
 
 
 class Command(BaseCommand):
@@ -49,11 +50,19 @@ class Command(BaseCommand):
                 #    f"No submissions without evaluation were found. Sleeping for {options['sleep_time']} seconds.")
                 sleep(options['sleep_time'])
             else:
-                selected_submission = submissions.first()
+                subs = list(submissions.all())
+                random.shuffle(subs)
+                selected_submission = subs[0]
 
                 if options['verbose']:
                     print("EVALUATING SUBMISSION:", selected_submission.id, "STUDENT:",
-                          selected_submission.student, "QUESTION:", selected_submission.question)
+                          selected_submission.student.first_name, selected_submission.student, "QUESTION:", selected_submission.question)
 
                 AutoJudgeRunner.evaluate(
                     selected_submission, options['keep'], options['verbose'])
+                '''
+                with Pool(processes=len(subs)) as pool:
+                    inputs = [(s, options['keep'], options['verbose'])
+                              for s in subs]
+                    pool.map(AutoJudgeRunner.evaluate, inputs)
+                '''

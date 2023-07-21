@@ -52,6 +52,8 @@ def submission_get_file(request, pk):
     if '.zip' in name:
         content_type = 'multipart/form-data'
 
+    name = f"Q{submission.question.id:05d}_{submission.student.username}_{submission.student.first_name}_{name}"
+
     response = HttpResponse(data, content_type=content_type)
     response['Content-Disposition'] = f'attachment; filename={name}'
 
