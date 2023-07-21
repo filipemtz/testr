@@ -32,7 +32,15 @@
         {{ d.status }}
         {% endif %}
     </div>
-    <div class="col border"><a href="{% url 'submission-file' d.submission_id %}">{{ submission.file_name }}</a></div>
+    <div class="col border">
+        {% if d.submission_id %}
+        <a href="{% url 'submission-file' d.submission_id %}">
+            <i class="bi bi-download"></i>    
+        </a>
+        {% else %}
+        -
+        {% endif %}
+    </div>
 </div>
 {% endfor %}
 {% endif %}
