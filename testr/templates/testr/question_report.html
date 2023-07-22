@@ -5,6 +5,10 @@
 <div class="h1">Question Report</div>
 
 {% if data %}
+<div class="h3">
+    {{ question.name }}
+</div>
+
 <div>
     <center>
         <a href="{% url 'question-rejudge-all' question.id %}">Run Autojudge Again</a>
