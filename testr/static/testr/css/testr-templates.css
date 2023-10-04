@@ -41,8 +41,12 @@
     padding-bottom: 10px;
 }
 
-.question-language {
+.question-deadline {
     padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.question-language {
     padding-bottom: 20px;
 }
 
