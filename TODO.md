@@ -1,6 +1,22 @@
 
+# Requirements 
+
+[ ] Professores devem ser capazes de executar o sistema localmente para não inviabilizar atividades se internet não estiver disponível (e.g., prova no labgrad).
+[ ] Personalizar script de correção.
+        [ ] Laiola corrige exercícios de bancos de dados.
+        [ ] Thiago executa compilação cruzada de arquivos e "força" o conteúdo de alguns arquivos.
+        [ ] Patrícia usa muitos arquivos, potencialmente grandes, e indica qual deve ser usado via linha de comando.
+        [ ] Filipe e Vinicius desejam executar valgrind e moss automaticamente.
+[ ] Correções devem ser feitas em paralelo.
+[ ] Novas linguagens e métodos de correção devem ser facilmente adicionáveis.
+[ ] Segurança e confiabilidade.
+[ ] Deve ser possível baixar questões como pacotes independentes de forma que professores possam exportá-las e, por exemplo, subir no AVA. Os pacotes devem incluir casos de teste e script de correção.
+[ ] Deve existir uma base de questões passível de busca. Professores devem poder buscar questões na base e adicioná-las em turmas e atividades.
+
 # Backlog
 
+- [ ] non-functional: safety.
+- [ ] as teacher, see a log of logins and IPs so that I can check if students cheated by logging in the same account in multiple computers or copied the answers from someone sit by his/her side.
 - [ ] as teacher, define start and end dates for submissions so that we can do tests with limited time.
 - [ ] allow removing files from questions
 - [ ] show progress in relation to others as a gamification strategy
@@ -40,6 +56,7 @@
 - [ ] Teachers - edit or submit new docker images to run programs.
 - [ ] Process input and output tests when submitted and not when running tests.
 - [ ] Write unit tests
+- [ ] As student, receive support from an AI agent so that I can advance my studies by myself.
 
 # Known Bugs 
 
