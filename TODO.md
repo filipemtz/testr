@@ -1,17 +1,17 @@
 
 # Requirements 
 
-[ ] Professores devem ser capazes de executar o sistema localmente para não inviabilizar atividades se internet não estiver disponível (e.g., prova no labgrad).
-[ ] Personalizar script de correção.
-        [ ] Laiola corrige exercícios de bancos de dados.
-        [ ] Thiago executa compilação cruzada de arquivos e "força" o conteúdo de alguns arquivos.
-        [ ] Patrícia usa muitos arquivos, potencialmente grandes, e indica qual deve ser usado via linha de comando.
-        [ ] Filipe e Vinicius desejam executar valgrind e moss automaticamente.
-[ ] Correções devem ser feitas em paralelo.
-[ ] Novas linguagens e métodos de correção devem ser facilmente adicionáveis.
-[ ] Segurança e confiabilidade.
-[ ] Deve ser possível baixar questões como pacotes independentes de forma que professores possam exportá-las e, por exemplo, subir no AVA. Os pacotes devem incluir casos de teste e script de correção.
-[ ] Deve existir uma base de questões passível de busca. Professores devem poder buscar questões na base e adicioná-las em turmas e atividades.
+- [ ] Professores devem ser capazes de executar o sistema localmente para não inviabilizar atividades se internet não estiver disponível (e.g., prova no labgrad).
+- [ ] Personalizar script de correção.
+  - [ ] Laiola corrige exercícios de bancos de dados.
+  - [ ] Thiago executa compilação cruzada de arquivos e "força" o conteúdo de alguns arquivos.
+  - [ ] Patrícia usa muitos arquivos, potencialmente grandes, e indica qual deve ser usado via linha de comando.
+  - [ ] Filipe e Vinicius desejam executar valgrind e moss automaticamente.
+- [ ] Correções devem ser feitas em paralelo.
+- [ ] Novas linguagens e métodos de correção devem ser facilmente adicionáveis.
+- [ ] Segurança e confiabilidade.
+- [ ] Deve ser possível baixar questões como pacotes independentes de forma que professores possam exportá-las e, por exemplo, subir no AVA. Os pacotes devem incluir casos de teste e script de correção.
+- [ ] Deve existir uma base de questões passível de busca. Professores devem poder buscar questões na base e adicioná-las em turmas e atividades.
 
 # Backlog
 
