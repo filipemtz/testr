@@ -71,8 +71,11 @@
                     </div>
                 </div>
                 <div class="p-2">
-                    <div class="header-text text-center">
-                        <a href="{% url 'logout' %}?next={% url 'login' %}">Logout</a>
+                    <div class="header-text text-center" >
+                        <form method="post" action="{% url 'logout' %}" style="padding: 0 0 0 0;">
+                            {% csrf_token %}
+                            <button class='btn btn-primary' type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
