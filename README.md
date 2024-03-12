@@ -3,32 +3,44 @@
 
 Site for automatically evaluating programming exercises.
 
-## Setup 
+## Setup
 
 Create a config.json file (see config-sample.json). For using PostgreSQL, refer to
 the respective section below.
 
-Install docker by following the instructions in the [documentation](https://docs.docker.com/engine/install). The common commands are given in the specific section below.
+For using docker when running the auto judge system, install docker by following the instructions in the respective section below in this documentation.
 
-Build the docker image used by the autojudge with the following instruction. Feel free to try and change the Dockerfile in data/docker_imgs/base to further install things.
+Setup postgresql. Instructions are based on this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04).
+
+To install postgre in ubuntu, use:
 
 ```
-# linux
-cd ./data/docker_imgs/base/ && sudo sh ./create_base_docker_image.sh && cd ../../../
-
-# windows
-cd .\data\docker_imgs\base
-.\create_base_docker_image.sh
-cd ../../../
+sudo apt update
+sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
 ```
+
+To configure postgresql to be used with django, use (UPDATE 'password'):
+
+```
+>> sudo -u postgres psql
+CREATE DATABASE testr;
+CREATE USER testr_user WITH PASSWORD 'password';
+ALTER ROLE testr_user SET client_encoding TO 'utf8';
+ALTER ROLE testr_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE testr_user SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE testr TO testr_user;
+\q
+```
+
+Add the database connection information in config.json.
 
 Install python requirements:
 
 ```
-python -m pip install -r requirements.txt 
+python -m pip install -r requirements.txt
 ```
 
-Setup the system database. 
+Setup the system database.
 
 ```
 python manage.py migrate
@@ -46,15 +58,15 @@ Create groups and assign permissions.
 python manage.py setperms permissions.json
 ```
 
-That's it. Use the command below to run the server and follow the URL presented 
-in the terminal to start using the system. 
+That's it. Use the command below to run the server and follow the URL presented
+in the terminal to start using the system.
 
 ```
 python manage.py runserver
 ```
 
 Use the following commando to start the autojudge system. It will evaluate all
-submissions that were not evaluated yet and then wait for new submissions. If 
+submissions that were not evaluated yet and then wait for new submissions. If
 the autojudge is not run, users will not receive the result of their submissions.
 
 ```
@@ -63,7 +75,7 @@ python manage.py judge
 
 **Observation:** Use ```--help```  to check the options available in the autojudge system, e.g., re-evaluate all submissions, keep submitted files saved on disk, etc.
 
-To allow django to be accessed from a different computer, add the server computer IP to ALLOWED_HOSTS, and run the server as follows: 
+To allow django to be accessed from a different computer, add the server computer IP to ALLOWED_HOSTS, and run the server as follows:
 
 ```
 python manage.py runserver 0.0.0.0:8000
@@ -107,63 +119,49 @@ To allow non-root users to use docker, create a docker group and add the user to
 ```
 sudo groupadd docker
 sudo usermod -aG docker $USER
-newgrp docker 
+newgrp docker
 ```
 
-## Set-up with PostgreSQL
-
-Follow the instructions in this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04).
-
-To install postgre in ubuntu, use: 
+Build the docker image used by the autojudge with the following instruction. Feel free to try and change the Dockerfile in data/docker_imgs/base to further install things.
 
 ```
-sudo apt update
-sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
-```
+# linux
+cd ./data/docker_imgs/base/ && sudo sh ./create_base_docker_image.sh && cd ../../../
 
-To configure postgresql to be used with django, use:
-
+# windows
+cd .\data\docker_imgs\base
+.\create_base_docker_image.sh
+cd ../../../
 ```
-sudo -u postgres psql
-CREATE DATABASE testr;
-CREATE USER testr_user WITH PASSWORD 'password';
-ALTER ROLE testr_user SET client_encoding TO 'utf8';
-ALTER ROLE testr_user SET default_transaction_isolation TO 'read committed';
-ALTER ROLE testr_user SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE testr TO testr_user;
-\q
-```
-
-Add the database connection information in config.json.
 
 ## Dumping and loading a database
 
-It is possible to use django to dump the database with the following command: 
+It is possible to use django to dump the database with the following command:
 
 ```
 python manage.py dumpdata > db.json
 ```
 
-However, when I tried to use this command in windows it saved the data with a 
+However, when I tried to use this command in windows it saved the data with a
 weird charset that I could not figure out. Therefore, I chose to use the tools
-from the db management system. In postgreSQL, for instance, one can dump the 
-db with: 
+from the db management system. In postgreSQL, for instance, one can dump the
+db with:
 
 ```
 pg_dump -U <username> <db_name> > test.dump
 ```
 
-The dump file can be load with: 
+The dump file can be load with:
 
-``` 
+```
 psql <databasename> < data_base_dump
-``` 
+```
 
 or:
 
-``` 
+```
 sudo -u postgres psql <databasename> < data_base_dump
-``` 
+```
 
 
 ## Information for Devs/Contributors
