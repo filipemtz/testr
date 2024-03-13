@@ -2,6 +2,7 @@
 # Requirements
 
 - [ ] Professores devem ser capazes de executar o sistema localmente para não inviabilizar atividades se internet não estiver disponível (e.g., prova no labgrad).
+- [ ] O sistema deve ser resistente a alunos :) Por exemplo, se o aluno se desmatricular de uma disciplina no meio do semestre (é raro, mas acontece bastante), as submissões não devem ser perdidas. 
 - [ ] Personalizar script de correção.
   - [ ] Laiola corrige exercícios de bancos de dados.
   - [ ] Thiago executa compilação cruzada de arquivos e "força" o conteúdo de alguns arquivos.
