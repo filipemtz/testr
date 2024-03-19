@@ -84,6 +84,7 @@
 
     {% for test in question.evaluationinputoutput_set.all %}
     <form action="{% url 'in_out-test-update' test.id %}" method='post'>
+        {% csrf_token %}
         <div class="row input_output_test">
             <div class="col-5">
                 <textarea name="input" id="input">{{ test.input }}</textarea>
