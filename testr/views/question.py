@@ -210,6 +210,20 @@ def question_get_file(request, pk, file_id):
 
 
 @login_required
+def question_remove_file(request, pk, file_id):
+    file = get_object_or_404(QuestionFile, id=file_id)
+    question = get_object_or_404(Question, id=pk)
+
+    if file.question != question:
+        return render(request, 'testr/error_page.html', {
+            'error_msg': "File does not belong to question."
+        })
+
+    file.delete()
+    return redirect('question-update', pk=pk)
+
+
+@login_required
 def question_report(request, pk):
     if not GroupValidator.user_is_in_group(request.user, 'teacher'):
         return redirect('question-detail', pk=pk)

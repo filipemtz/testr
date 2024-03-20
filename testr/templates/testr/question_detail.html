@@ -42,7 +42,10 @@
     <br>
     {% for file in question.questionfile_set.all %}
     <div>
-        <div><a href="{% url 'get-question-file' question.id file.id %}">{{ file.file_name }}</a></div>
+        <div>
+            <a href="{% url 'remove-question-file' question.id file.id %}"><i class="bi bi-x-lg text-danger"></i></a>
+            <a href="{% url 'get-question-file' question.id file.id %}">{{ file.file_name }}</a>
+        </div>
     </div>
     {% endfor %}
     {% endif %}

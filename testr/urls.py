@@ -48,6 +48,8 @@ urlpatterns = [
          views.question_add_file, name="add-file-to-question"),
     path('question/<int:pk>/get_file/<int:file_id>',
          views.question_get_file, name="get-question-file"),
+    path('question/<int:pk>/remove_file/<int:file_id>',
+         views.question_remove_file, name="remove-question-file"),
 
     # course enrollment
     path('course/<int:course_id>/enroll/<uuid:enroll_password>',
