@@ -16,6 +16,7 @@
 
 # Backlog
 
+- [ ] as teacher, remove all tests when they were auto-generated with problems.
 - [ ] non-functional: safety.
 - [ ] as teacher, see a log of logins and IPs so that I can check if students cheated by logging in the same account in multiple computers or copied the answers from someone sit by his/her side.
 - [ ] as teacher, define start and end dates for submissions so that we can do tests with limited time.
