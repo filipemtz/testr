@@ -1,6 +1,7 @@
 
 # Requirements
 
+- [ ] Se o judge tiver rodado e o professor mudar casos de teste (remover ou adicionar, por exemplo), a interface do aluno não deve quebrar.
 - [ ] Professores devem ser capazes de executar o sistema localmente para não inviabilizar atividades se internet não estiver disponível (e.g., prova no labgrad).
 - [ ] O sistema deve ser resistente a alunos :) Por exemplo, se o aluno se desmatricular de uma disciplina no meio do semestre (é raro, mas acontece bastante), as submissões não devem ser perdidas. 
 - [ ] Personalizar script de correção.
