@@ -63,6 +63,8 @@
 
 # Known Bugs
 
+- [ ] Tags adicionadas na descrição da questão afetam o restante da página. Por exemplo, se o professor adicionar um "<b>" e não fechar na descrição, a página inteira da questão, inclusive testes, etc. ficará em negrito.
+
 - [ ] Melhorar o README.md para que as instalações do Postgres só precisem ser feitas se a pessoa for usar este BD. Requer atualizar o requirements.txt para remover o psycopg2.
 
 - [ ] When the user running the autojudge does not have permission to interact with docker, the autojudge sets the questions as incorrect as a result of the failure in running docker. Check if docker can be used before grading questions.
