@@ -49,6 +49,7 @@
     <br>
     <div>
         <form method='post' enctype="multipart/form-data" action="{% url 'course-batch-enroll' course.id %}">
+            {% csrf_token %}
             <div><input type="file" name="file" id="file" /></div> <br>
             <div><input class="btn btn-success" type="submit" name="file" id="file" value="Submit" /></div>
         </form>

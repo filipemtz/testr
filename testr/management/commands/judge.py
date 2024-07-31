@@ -30,7 +30,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--sleep_time',
             type=int,
-            default=2,
+            default=0.3,
             help='Number of seconds autojudge will sleep when there are no submissions to evaluate.')
 
     def handle(self, *args, **options):
