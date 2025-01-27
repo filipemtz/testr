@@ -76,10 +76,15 @@ class QuestionDelete(DeleteView):
 def perform_question_submission(request, question_id):
     if request.method == 'POST':
         form = FileSubmissionForm(request.POST, request.FILES)
+
         if form.is_valid():
             file = request.FILES['file']
 
+            #print("FILE:", file)
+            #print("User:", request.user)
             question = get_object_or_404(Question, id=question_id)
+            file_data = file.read()
+            #print("Read:", file_data)
 
             # IMPORTANT: read loads the entire file in memory. A better
             # approach would be to use f.chunks(), but then how to save
@@ -87,14 +92,17 @@ def perform_question_submission(request, question_id):
             new_submission = Submission(
                 question=question,
                 student=request.user,
-                file=file.read(),
+                file=file_data,
                 file_name=file.name,
                 status=SubmissionStatus.WAITING_EVALUATION
             )
 
             new_submission.save()
+            print(f"Submission {new_submission.id} created!")
 
             return redirect('question-detail', pk=question_id)
+        else:
+            print("FORM INVALID!")
 
     return render(request, 'testr/error_page.html', {
         'error_msg': "You should not get here this way."
@@ -157,7 +165,6 @@ def question_rejudge_all(request, pk):
     question = get_object_or_404(Question, id=pk)
     question.submission_set.update(status=SubmissionStatus.WAITING_EVALUATION)
     return redirect('question-detail', pk=pk)
-
 
 @login_required
 def question_add_file(request, pk):

@@ -25,6 +25,8 @@
     {% endif %}
 </div>
 
+<div><a href="{% url 'course-detail' question.section.course.id %}">Back</a></div>
+
 <div class="question-deadline">
     <b>Deadline:</b> {{ question.submission_deadline }}
 </div>

@@ -21,7 +21,7 @@ class CourseListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         if GroupValidator.user_is_in_group(self.request.user, 'teacher'):
-            return Course.objects.filter(professor=self.request.user)
+            return Course.objects.all()  # filter(professor=self.request.user)
         else:
             # ##################################################################################
             # TODO: Find the correct way of returning the courses that the student is enrolled.

@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
         parser.add_argument(
             '--sleep_time',
-            type=int,
+            type=float,
             default=0.3,
             help='Number of seconds autojudge will sleep when there are no submissions to evaluate.')
 
@@ -37,8 +37,10 @@ class Command(BaseCommand):
         print("\nAutojudge running.\n")
 
         if options['rerun']:
+            print("Changing status of all submissions")
             Submission.objects.update(
                 status=SubmissionStatus.WAITING_EVALUATION)
+            print("Done.")
 
         while True:
 
